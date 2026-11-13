@@ -6,9 +6,9 @@ Repository: [Chancelor2023/ece-big-data-processing-project](https://github.com/C
 
 | Group information | Value |
 | --- | --- |
-| Class group | To complete |
-| Contributor 1 / GitHub username | Jerry / Chancelor2023 |
-| Contributor 2 / GitHub username | To complete |
+| Class group | Ing5 Gr3 |
+| Contributor 1 / GitHub username | Jerry CHENG / Chancelor2023 |
+| Contributor 2 / GitHub username | Brett FAJGENBAUM / Brett273 |
 
 Start with [PROJECT.md](PROJECT.md) for installation, commands and environment details.
 [REPORT.md](REPORT.md) is a heading-only template for the group's own results and reasoning.
