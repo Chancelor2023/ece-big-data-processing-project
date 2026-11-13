@@ -1,0 +1,34 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+
+# Python and notebooks
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.ruff_cache/
+
+# Generated inputs, outputs and Spark state
+data/**
+!data/**/
+!data/**/.gitkeep
+results/**
+!results/**/
+!results/**/.gitkeep
+logs/**
+!logs/.gitkeep
+spark-warehouse/
+metastore_db/
+derby.log
+artifacts/
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
