@@ -1,4 +1,4 @@
-"""Download the two official IMDb TSV archives with integrity metadata."""
+"""Download official IMDb archives, defaulting to the first two title tables."""
 
 import argparse
 import gzip
@@ -13,14 +13,9 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from imdb_pipeline.config import RAW_DIR
+from imdb_pipeline.schemas import ALL_COLUMNS, TITLE_COLUMNS
 
-TABLES = {
-    "title.basics": [
-        "tconst", "titleType", "primaryTitle", "originalTitle", "isAdult",
-        "startYear", "endYear", "runtimeMinutes", "genres",
-    ],
-    "title.ratings": ["tconst", "averageRating", "numVotes"],
-}
+TABLES = ALL_COLUMNS
 SOURCE_ROOT = "https://datasets.imdbws.com"
 
 
@@ -39,16 +34,23 @@ def fingerprint(path: Path, table: str) -> dict:
     return {"bytes": path.stat().st_size, "sha256": sha.hexdigest()}
 
 
-def main() -> None:
+def main(default_tables=None, manifest_name="title_downloads.json") -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--raw-dir", type=Path, default=RAW_DIR)
     parser.add_argument("--refresh", action="store_true")
+    parser.add_argument(
+        "--tables", nargs="+", choices=list(TABLES),
+        default=default_tables or list(TITLE_COLUMNS),
+    )
     args = parser.parse_args()
     args.raw_dir.mkdir(parents=True, exist_ok=True)
-    manifest_path = args.raw_dir / "title_downloads.json"
+    manifest_path = args.raw_dir / manifest_name
+    seed = args.raw_dir / "title_downloads.json"
     previous = (
         json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest_path.exists() else {}
+        if manifest_path.exists() else (
+            json.loads(seed.read_text(encoding="utf-8")) if seed.exists() else {}
+        )
     )
     session = requests.Session()
     session.headers.update({
@@ -60,7 +62,7 @@ def main() -> None:
         status_forcelist=[429, 500, 502, 503, 504],
         allowed_methods=["GET"], respect_retry_after_header=True,
     )))
-    for table in TABLES:
+    for table in args.tables:
         destination = args.raw_dir / f"{table}.tsv.gz"
         url = f"{SOURCE_ROOT}/{destination.name}"
         if destination.exists() and not args.refresh:
