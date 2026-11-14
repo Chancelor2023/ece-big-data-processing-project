@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import tempfile
 import time
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -18,10 +19,29 @@ USER_AGENT = os.environ.get(
 
 def save_json(path, value):
     path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(".json.tmp")
-    temporary.write_text(json.dumps(value, ensure_ascii=False) + "\n", encoding="utf-8")
-    os.replace(temporary, path)
+    payload = json.dumps(value, ensure_ascii=False) + "\n"
+    for attempt in range(4):
+        temporary = None
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            descriptor, filename = tempfile.mkstemp(
+                prefix="." + path.name + ".", suffix=".tmp", dir=path.parent,
+            )
+            temporary = Path(filename)
+            with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as stream:
+                stream.write(payload)
+            os.replace(temporary, path)
+            return
+        except (FileNotFoundError, PermissionError):
+            if attempt == 3:
+                raise
+            time.sleep(0.25 * 2 ** attempt)
+        finally:
+            if temporary is not None:
+                try:
+                    temporary.unlink(missing_ok=True)
+                except OSError:
+                    pass
 
 
 def retry_delay(value, fallback):
