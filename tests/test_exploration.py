@@ -30,8 +30,32 @@ class T(unittest.TestCase):
         r = self.s.createDataFrame([("t1", 7.0, 50), ("t2", 7.0, 10), ("t3", 7.0, 10),
                                     ("t4", 7.0, 10), ("t5", None, 999)], R)
         out = A.compute_q2(A.genre_year_stats(b, r, P), P).collect()
-        self.assertEqual(sorted(x.genre for x in out), ["A", "B", "C", "D"])
+        self.assertEqual(sorted(x.genre for x in out), ["A", "B", "C"])
+        self.assertNotIn("D", [x.genre for x in out])
         self.assertTrue(all(x.is_tie for x in out if x.rank == 2))
+
+    def test_q3_vote_shares_sum_to_100_per_year(self):
+        b = self.s.createDataFrame([
+            mv(1, g=("A",), y=2000), mv(2, g=("B",), y=2000),
+            mv(3, g=("C",), y=2001), mv(4, g=("D",), y=2001)], B)
+        r = self.s.createDataFrame([
+            ("t1", 8.0, 60), ("t2", 7.0, 40),
+            ("t3", 9.0, 25), ("t4", 6.0, 75)], R)
+        out = A.compute_q3(A.genre_year_stats(b, r, P), P).collect()
+        shares = {}
+        for row in out:
+            shares.setdefault(row.startYear, []).append(row.vote_share)
+        self.assertEqual(set(shares), {2000, 2001})
+        for year_shares in shares.values():
+            self.assertAlmostEqual(sum(year_shares), 100.0, delta=1e-6)
+
+    def test_q3_zero_vote_total_returns_null_shares(self):
+        b = self.s.createDataFrame([
+            mv(1, g=("A",), y=2002), mv(2, g=("B",), y=2002)], B)
+        r = self.s.createDataFrame([("t1", 8.0, 0), ("t2", 7.0, 0)], R)
+        out = A.compute_q3(A.genre_year_stats(b, r, P), P).collect()
+        self.assertTrue(out)
+        self.assertTrue(all(row.vote_share is None for row in out))
 
     def test_multigenre_film_counted_once_per_genre(self):
         b = self.s.createDataFrame([mv(1, g=("A", "B"))], B)

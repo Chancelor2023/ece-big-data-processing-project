@@ -43,7 +43,12 @@ def genre_year_stats(basics, ratings, p):
 
 
 def compute_q2(stats, p):
-    return stats.filter(F.col("rank") <= p.top_n)
+    """Select top_n per year by votes desc, rating desc, then genre asc."""
+    w = Window.partitionBy("startYear").orderBy(
+        F.desc("total_votes"), F.desc("avg_rating"), F.asc("genre"))
+    return (stats.withColumn("_q2_row", F.row_number().over(w))
+            .filter(F.col("_q2_row") <= p.top_n)
+            .drop("_q2_row"))
 
 
 def compute_q3(stats, p):
@@ -55,4 +60,7 @@ def compute_q3(stats, p):
         F.sum("total_votes").alias("votes"),
         F.avg("avg_rating").alias("mean_genre_rating"),
         F.avg("n_movies").alias("mean_movies_per_genre"))
-    return g.withColumn("vote_share", F.col("votes") / F.sum("votes").over(year))
+    # Report percentages; a zero yearly total has no defined share and stays null.
+    return g.withColumn(
+        "vote_share",
+        F.try_divide(F.col("votes") * 100.0, F.sum("votes").over(year)))
