@@ -9,7 +9,7 @@
 
 ## Environment scope
 
-This initial setup provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab, persistent local files, explicit topic creation and a synthetic integration test. IMDb preparation, analytical answers, enrichment and live Wikimedia ingestion are not implemented yet.
+This setup provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab, persistent local files, explicit topic creation and a synthetic integration test. Preparation jobs for the complete `title.basics` and `title.ratings` source files are available. Other IMDb tables, analytical answers, enrichment and live Wikimedia ingestion remain to be implemented.
 
 Spark runs in `local[2]` mode inside one container, as in a local lab. This is not a multi-node Spark cluster. Kafka uses one KRaft broker/controller with persistent storage and no ZooKeeper.
 
@@ -107,6 +107,36 @@ Only one Spark application binds to UI port 4040 at a time. Stop an unused noteb
 
 ## Persistence and inputs
 
+### Prepare the first two IMDb tables
+
+```bash
+docker compose exec -T spark python -m jobs.preparation.download_titles
+docker compose exec -T spark python -m unittest tests.test_preparation -v
+docker compose exec -T spark python -m jobs.preparation.prepare_titles
+```
+
+The download job saves the official compressed files in `data/raw`, checks the exact headers and complete gzip integrity, and records source URLs, HTTP metadata and SHA-256 fingerprints in `data/raw/title_downloads.json`. Existing files are verified and reused. `--refresh` explicitly requests a new download; the sources are updated daily by IMDb.
+
+The preparation job processes both complete source files, without filtering years or title types. It writes a new immutable snapshot under `data/clean/runs/<run_id>/`, column profiles and a machine-readable quality report under `results/quality/<run_id>/`, and quarantined rows under that report directory. It does not overwrite previous snapshots.
+
+After both tables pass read-back, key and join checks, `data/clean/current.json` atomically publishes the pair. A failed preparation does not replace the previous publication. The per-run report explicitly covers only these two tables, not the complete IMDb dataset.
+
+Read [docs/DATA_CONTRACT.md](docs/DATA_CONTRACT.md) before implementing analyses. Load both tables from one publication:
+
+```python
+from imdb_pipeline.spark import create_spark
+from imdb_pipeline.tables import load_clean_tables
+
+spark = create_spark("my-analysis")
+tables = load_clean_tables(spark)
+basics = tables["title.basics"]
+ratings = tables["title.ratings"]
+```
+
+The cleaned `genres` field is an array of strings, not a comma-separated string. Downloaded raw files are preserved. A peer can reproduce the tables using the same commands; source fingerprints identify the snapshot used for a result.
+
+Use `--partitions N` on `prepare_titles` to adjust the default eight shuffle/output partitions. The job uses disk-backed persistence for intermediate DataFrames instead of attempting to hold the complete title dataset in memory.
+
 The project directory is mounted at `/workspace`. Files written under `/workspace/data`, `/workspace/results` and `/workspace/notebooks` remain on the host after container recreation. Kafka logs use the named `kafka-data` volume.
 
 Use `data/raw` for downloaded IMDb source files, `data/clean` for the shared cleaned-table contract, `data/enrichment` for collected/enriched data and `data/checkpoints` for separate streaming query checkpoints. Do not reuse one checkpoint directory for unrelated streaming queries.
@@ -147,6 +177,8 @@ docker compose exec -T spark python -m jobs.smoke_test
 - Change `requirements.txt`, Dockerfile or `spark-defaults.conf`: rebuild the Spark image. Normal source edits are immediately visible through the workspace mount.
 
 ## AI assistance declaration
+
+For the title-table preparation task, OpenAI Codex also assisted with download/preparation code, the table-loading helper, transformation tests and technical data-contract documentation. The group remains responsible for its own methodological reasoning in `REPORT.md`.
 
 OpenAI Codex was used to create the initial project structure and configuration, and tasks repartition between members. No analytical results or methodological reasoning for `REPORT.md` have been generated in this setup.
 

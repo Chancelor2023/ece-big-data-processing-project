@@ -21,7 +21,8 @@ docker/spark/              Reproducible Python/Spark image and configuration
 src/imdb_pipeline/         Shared settings and Spark session factory
 jobs/create_topics.py      Explicit, repeatable project-topic creation
 jobs/smoke_test.py         Synthetic end-to-end environment verification
-jobs/preparation/          Future IMDb loading and quality jobs
+jobs/preparation/          Download and prepare title.basics and title.ratings
+docs/DATA_CONTRACT.md      Published schemas and loading interface
 jobs/exploration/          Future answers to the eight exploration questions
 jobs/enrichment/           Future collection and Spark enrichment jobs
 jobs/streaming/            Future live Wikimedia processing
@@ -33,6 +34,10 @@ logs/                     Local execution logs
 ```
 
 Data and generated outputs are ignored by Git. Include selected final outputs in the report or a deliberately versioned report-assets directory when preparing the submission.
+
+## First IMDb data delivery
+
+Run the three preparation commands in [PROJECT.md](PROJECT.md#prepare-the-first-two-imdb-tables) to download, test and prepare the first two tables. [The data contract](docs/DATA_CONTRACT.md) documents types, missing values, row handling and how both tables are loaded from one validated snapshot.
 
 ## Collaboration
 
