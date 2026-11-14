@@ -1,4 +1,5 @@
-from pyspark.sql import Window, functions as F
+from pyspark.sql import DataFrame, Window, functions as F
+from pyspark.sql.types import ArrayType
 
 
 def feature_films(basics, p):
