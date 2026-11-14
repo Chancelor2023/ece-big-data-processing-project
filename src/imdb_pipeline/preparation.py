@@ -1,4 +1,4 @@
-"""Spark transformations for the first two IMDb tables."""
+"""Shared IMDb readers/profiles and transformations for the first title tables."""
 
 import gzip
 from pathlib import Path
@@ -6,20 +6,15 @@ from pathlib import Path
 from pyspark.sql import DataFrame, SparkSession, Window
 from pyspark.sql import functions as F
 
-TITLE_COLUMNS = {
-    "title.basics": [
-        "tconst", "titleType", "primaryTitle", "originalTitle", "isAdult",
-        "startYear", "endYear", "runtimeMinutes", "genres",
-    ],
-    "title.ratings": ["tconst", "averageRating", "numVotes"],
-}
+from imdb_pipeline.schemas import ALL_COLUMNS, TABLE_KEYS, TITLE_COLUMNS
 
 
 def read_tsv(spark: SparkSession, path: Path, table: str) -> DataFrame:
     """Read literal TSV fields, preserving quotes and rejecting wrong widths."""
-    columns = TITLE_COLUMNS[table]
+    columns = ALL_COLUMNS[table]
     header = "\t".join(columns)
-    with gzip.open(path, "rt", encoding="utf-8") as source:
+    opener = gzip.open if path.suffix == ".gz" else open
+    with opener(path, "rt", encoding="utf-8") as source:
         if source.readline().rstrip("\r\n") != header:
             raise ValueError(f"Unexpected header for {table}: {path}")
     lines = spark.read.text(str(path)).filter(F.col("value") != header)
@@ -117,15 +112,16 @@ def prepare_rows(raw: DataFrame, table: str) -> DataFrame:
 
 def rank_records(prepared: DataFrame, table: str, partitions: int) -> DataFrame:
     """Keep the most complete record per key, with deterministic tie breaking."""
-    columns = TITLE_COLUMNS[table]
+    columns = ALL_COLUMNS[table]
+    keys = TABLE_KEYS[table]
     completeness = sum(F.col(c).isNotNull().cast("int") for c in columns)
     canonical = F.to_json(F.struct(*[F.col(c) for c in columns]))
-    window = Window.partitionBy("tconst").orderBy(
+    window = Window.partitionBy(*keys).orderBy(
         completeness.desc(), canonical.asc(), F.col("_raw_line").asc()
     )
     return (
         prepared.filter(F.col("_reject_reason").isNull())
-        .repartition(partitions, "tconst")
+        .repartition(partitions, *keys)
         .withColumn("_key_rank", F.row_number().over(window))
     )
 
@@ -137,7 +133,7 @@ def mark_rating_parents(ratings: DataFrame, basics: DataFrame) -> DataFrame:
 
 def profile_columns(frame: DataFrame, table: str, stage: str) -> tuple:
     """Collect only a single aggregate row, never the underlying title table."""
-    columns = TITLE_COLUMNS[table]
+    columns = ALL_COLUMNS[table]
     aggregates = [F.count("*").alias("_rows")]
     for i, name in enumerate(columns):
         column = F.col(name)
