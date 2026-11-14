@@ -21,7 +21,8 @@ docker/spark/              Reproducible Python/Spark image and configuration
 src/imdb_pipeline/         Shared settings and Spark session factory
 jobs/create_topics.py      Explicit, repeatable project-topic creation
 jobs/smoke_test.py         Synthetic end-to-end environment verification
-jobs/preparation/          Download and prepare title.basics and title.ratings
+jobs/preparation/          Download, profile and prepare the seven IMDb tables
+docs/REMAINING_TABLES.md   Prepare the five remaining IMDb tables and global profile
 docs/DATA_CONTRACT.md      Published schemas and loading interface
 jobs/exploration/          Future answers to the eight exploration questions
 jobs/enrichment/           Future collection and Spark enrichment jobs
@@ -38,6 +39,8 @@ Data and generated outputs are ignored by Git. Include selected final outputs in
 ## First IMDb data delivery
 
 Run the three preparation commands in [PROJECT.md](PROJECT.md#prepare-the-first-two-imdb-tables) to download, test and prepare the first two tables. [The data contract](docs/DATA_CONTRACT.md) documents types, missing values, row handling and how both tables are loaded from one validated snapshot.
+
+For people, crews, episodes, credits and aliases, follow [the remaining-table guide](docs/REMAINING_TABLES.md). It describes the five-table preparation, resumable runs and the final seven-table catalog.
 
 ## Collaboration
 

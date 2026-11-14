@@ -1,6 +1,6 @@
-# Cleaned IMDb title tables
+# Cleaned IMDb tables
 
-Contract version 1 covers `title.basics` and `title.ratings`. The preparation preserves all source title types and years; analytical scope filters belong to downstream jobs. Every published table has one row per non-null `tconst`.
+Contract version 1 supports the seven IMDb tables. The first delivery covers `title.basics` and `title.ratings`; the remaining-table job extends the validated catalog without changing those schemas. Analytical scope filters belong to downstream jobs. Keys and row granularities differ by table, as listed below.
 
 ## Commands
 
@@ -16,7 +16,7 @@ All transformations, profiling and joins run with Spark. Python handles streamed
 
 ## Snapshot publication and loading
 
-`data/clean/current.json` contains a run identifier, source fingerprints, relative Parquet paths, row counts and Spark schemas. It is replaced only after both output tables and their join have passed validation. Parquet directories are at `data/clean/runs/<run_id>/title.basics/` and `data/clean/runs/<run_id>/title.ratings/`.
+`data/clean/current.json` contains a run identifier, source fingerprints, relative Parquet paths, row counts and Spark schemas. The first job publishes after both title tables and their join pass validation. The remaining-table job publishes only after all five additional tables pass key, reference, record-accounting and read-back checks. Parquet directories are under `data/clean/runs/<run_id>/`; use the manifest's paths because the full catalog retains the first delivery's validated title-table files.
 
 ```python
 from imdb_pipeline.spark import create_spark
@@ -31,7 +31,7 @@ with_ratings = movies.join(ratings, "tconst", "left")
 by_genre = with_ratings.withColumn("genre", F.explode("genres"))
 ```
 
-The helper reads the publication once, so related tables come from the same run. Keep the run identifier with analytical outputs. IMDb refreshes its sources daily; separate downloads may have different row counts and ratings even with identical code.
+The helper reads the publication once, so related tables come from one validated catalog. The catalog may reuse earlier validated snapshots. Keep its run identifier with analytical outputs. IMDb refreshes its sources daily; separate downloads may have different row counts and ratings even with identical code.
 
 ## Title basics schema
 
@@ -76,7 +76,27 @@ Parquet may report columns as nullable even for validated keys. Non-null/unique 
 
 Quarantines are grouped by table and reason under the quality-run directory. They preserve diagnostic records and are not analytical inputs by default. Field-anomaly counts can overlap and do not represent rows removed.
 
-The five most missing columns in the report are ranked only across these two source tables. The project's global ranking and full-data assessment must be extended when the other IMDb tables are prepared.
+The first delivery's ranking covers only its two source tables. The remaining-table job produces the seven-table report and a global ranking across all 39 source columns. Check `full_imdb_dataset_profiled` and the report scope before using a ranking as global.
+
+## Additional tables and natural keys
+
+| Table | Unique key | Important types and values |
+| --- | --- | --- |
+| `name.basics` | `nconst` | `primaryName`: string; `birthYear`, `deathYear`: integer; `primaryProfession`, `knownForTitles`: string arrays |
+| `title.crew` | `tconst` | `directors`, `writers`: arrays of person identifiers |
+| `title.episode` | `tconst` | `parentTconst`: string; `seasonNumber`, `episodeNumber`: non-negative integers; zero retained for specials |
+| `title.principals` | `tconst`, `ordering` | `ordering`: positive integer; `nconst`, `category`, `job`: strings; `characters`: JSON-decoded string array |
+| `title.akas` | `titleId`, `ordering` | `ordering`: positive integer; `title`, `region`, `language`: strings; `types`, `attributes`: string arrays; `isOriginalTitle`: Boolean |
+
+`name.basics` person keys match `nm` followed by digits. A death year before a known birth year is recorded as an anomaly and set to null; the person remains available. Profession and identifier arrays are trimmed, deduplicated and sorted. Syntactically invalid identifier tokens are removed and counted.
+
+The child and parent title identifiers in `title.episode` must exist in basics; a self-parent relation is quarantined. Credits must reference an existing title and person. Alias `titleId` joins to basics `tconst`; it is not renamed. A title can have many aliases and many credits. Preserve those cardinalities in analytical joins.
+
+Aliases retain source language and region codes, including unfamiliar values. `language` describes the alternative title; it is not a verified original spoken language of a film. ASCII STX separates elements within alias `types` and `attributes`; punctuation such as commas inside an attribute is preserved.
+
+Missing/invalid scalar fields become null. An explicit JSON `[]` in `characters` stays an empty array. Invalid character JSON becomes null and is counted. No text, biography, role, language or date is invented.
+
+See [REMAINING_TABLES.md](REMAINING_TABLES.md) for full preparation commands, resuming long runs, reference handling and the global quality report.
 
 ## Collaboration boundary
 
