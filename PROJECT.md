@@ -2,10 +2,10 @@
 
 ## Contributors
 
-| Contributor | Email | GitHub username |
+| Contributor | GitHub username |
 | --- | --- | --- |
-| Jerry | To complete | Chancelor2023 |
-| Second group member | To complete | To complete |
+| Jerry | Chancelor2023 |
+| Brett | Brett273 |
 
 ## Environment scope
 
@@ -148,7 +148,7 @@ docker compose exec -T spark python -m jobs.smoke_test
 
 ## AI assistance declaration
 
-OpenAI Codex was used to create the initial project structure, Docker/Compose configuration, shared Python helpers, synthetic environment verification, starter notebook and execution instructions. The group must update this declaration for any further AI-assisted development. No analytical results or methodological reasoning for `REPORT.md` have been generated in this setup.
+OpenAI Codex was used to create the initial project structure and configuration, and tasks repartition between members. No analytical results or methodological reasoning for `REPORT.md` have been generated in this setup.
 
 ## Official references
 
