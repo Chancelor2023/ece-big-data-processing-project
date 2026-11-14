@@ -36,23 +36,26 @@ def genre_year_stats(basics, ratings, p):
         F.sum("numVotes").alias("total_votes"),
         F.countDistinct("tconst").alias("n_movies"),
         F.avg("averageRating").alias("avg_rating"))
+    # rank : position avec ex aequo (information) ; is_tie : égalité de votes
     w = Window.partitionBy("startYear").orderBy(F.desc("total_votes"))
     wt = Window.partitionBy("startYear", "total_votes")
+    # top_rank : classement déterministe partagé par Q2 et Q3
+    # (votes décroissants, puis genre alphabétique) -> exactement top_n genres
+    w_top = Window.partitionBy("startYear").orderBy(F.desc("total_votes"), F.asc("genre"))
     return (agg.withColumn("rank", F.rank().over(w))
-            .withColumn("is_tie", F.count("*").over(wt) > 1))
+               .withColumn("is_tie", F.count("*").over(wt) > 1)
+               .withColumn("top_rank", F.row_number().over(w_top)))
 
 
 def compute_q2(stats, p):
-    """Select top_n per year by votes desc, rating desc, then genre asc."""
-    w = Window.partitionBy("startYear").orderBy(
-        F.desc("total_votes"), F.desc("avg_rating"), F.asc("genre"))
-    return (stats.withColumn("_q2_row", F.row_number().over(w))
-            .filter(F.col("_q2_row") <= p.top_n)
-            .drop("_q2_row"))
+    return (stats.filter(F.col("top_rank") <= p.top_n)
+                 .select("startYear", "top_rank", "genre", "total_votes",
+                         "n_movies", "avg_rating", "rank", "is_tie")
+                 .orderBy("startYear", "top_rank"))
 
 
 def compute_q3(stats, p):
-    s = stats.withColumn("group", F.when(F.col("rank") <= p.top_n, "top")
+    s = stats.withColumn("group", F.when(F.col("top_rank") <= p.top_n, "top")
                          .otherwise("rest"))
     year = Window.partitionBy("startYear")
     g = s.groupBy("startYear", "group").agg(
@@ -60,7 +63,7 @@ def compute_q3(stats, p):
         F.sum("total_votes").alias("votes"),
         F.avg("avg_rating").alias("mean_genre_rating"),
         F.avg("n_movies").alias("mean_movies_per_genre"))
-    # Report percentages; a zero yearly total has no defined share and stays null.
-    return g.withColumn(
-        "vote_share",
-        F.try_divide(F.col("votes") * 100.0, F.sum("votes").over(year)))
+    # try_divide : renvoie NULL si le total de l'année vaut 0 (au lieu de DIVIDE_BY_ZERO)
+    return g.withColumn("vote_share",
+                        F.try_divide(F.col("votes") * F.lit(100.0),
+                                     F.sum("votes").over(year)))

@@ -24,7 +24,7 @@ class T(unittest.TestCase):
         out = A.compute_q1(self.s.createDataFrame(rows, B), P).collect()
         self.assertEqual([x.tconst for x in out], ["t98"])
 
-    def test_q2_ties_kept_and_null_rating_excluded(self):
+    def test_q2_exactly_top_n_with_deterministic_tiebreak(self):
         b = self.s.createDataFrame([mv(1, g=("A",)), mv(2, g=("B",)),
                                     mv(3, g=("C",)), mv(4, g=("D",)), mv(5, g=("E",))], B)
         r = self.s.createDataFrame([("t1", 7.0, 50), ("t2", 7.0, 10), ("t3", 7.0, 10),
@@ -33,6 +33,19 @@ class T(unittest.TestCase):
         self.assertEqual(sorted(x.genre for x in out), ["A", "B", "C"])
         self.assertNotIn("D", [x.genre for x in out])
         self.assertTrue(all(x.is_tie for x in out if x.rank == 2))
+
+    def test_q3_top_group_has_exactly_top_n_genres_with_ties(self):
+        b = self.s.createDataFrame([mv(1, g=("A",)), mv(2, g=("B",)),
+                                    mv(3, g=("C",)), mv(4, g=("D",))], B)
+        r = self.s.createDataFrame([("t1", 7.0, 50), ("t2", 7.0, 10),
+                                    ("t3", 7.0, 10), ("t4", 7.0, 10)], R)
+        stats = A.genre_year_stats(b, r, P)
+        q2 = {x.genre for x in A.compute_q2(stats, P).collect()}
+        top = {x.genre for x in stats.filter(stats.top_rank <= P.top_n).collect()}
+        self.assertEqual(len(top), 3)
+        self.assertEqual(q2, top)  # Q2 et Q3 utilisent le même top 3
+        q3_top = [x for x in A.compute_q3(stats, P).collect() if x.group == "top"]
+        self.assertEqual(q3_top[0].n_genres, 3)  # pas 4 malgré l'égalité B/C/D
 
     def test_q3_vote_shares_sum_to_100_per_year(self):
         b = self.s.createDataFrame([
