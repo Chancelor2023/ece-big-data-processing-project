@@ -25,7 +25,7 @@ jobs/preparation/          Download, profile and prepare the seven IMDb tables
 docs/REMAINING_TABLES.md   Prepare the five remaining IMDb tables and global profile
 docs/DATA_CONTRACT.md      Published schemas and loading interface
 jobs/exploration/          Future answers to the eight exploration questions
-jobs/enrichment/           Future collection and Spark enrichment jobs
+jobs/enrichment/           IMDb target selection, Wikipedia collection and Spark enrichment
 jobs/streaming/            Future live Wikimedia processing
 jobs/open_question/        Future additional analysis
 notebooks/                Interactive development
@@ -41,6 +41,8 @@ Data and generated outputs are ignored by Git. Include selected final outputs in
 Run the three preparation commands in [PROJECT.md](PROJECT.md#prepare-the-first-two-imdb-tables) to download, test and prepare the first two tables. [The data contract](docs/DATA_CONTRACT.md) documents types, missing values, row handling and how both tables are loaded from one validated snapshot.
 
 For people, crews, episodes, credits and aliases, follow [the remaining-table guide](docs/REMAINING_TABLES.md). It describes the five-table preparation, resumable runs and the final seven-table catalog.
+
+For the film/person text pilot and full collection commands, follow [the enrichment guide](docs/ENRICHMENT.md).
 
 ## Collaboration
 
