@@ -1,6 +1,18 @@
 from pyspark.sql import DataFrame, Window, functions as F
 from pyspark.sql.types import ArrayType
 
+ACTING = ["actor", "actress"]
+
+
+def _array_col(df, name):
+    """Colonne `name` sous forme de tableau (déjà tableau, ou chaîne 'a,b,c')."""
+    if isinstance(df.schema[name].dataType, ArrayType):
+        return F.col(name)
+    return F.when(
+        F.col(name).isNull() | (F.col(name) == "\\N") | (F.col(name) == ""),
+        F.array().cast("array<string>"),
+    ).otherwise(F.split(F.col(name), ","))
+
 
 def feature_films(basics, p):
     return basics.filter((F.col("titleType") == "movie")
@@ -68,6 +80,15 @@ def compute_q3(stats, p):
     return g.withColumn("vote_share",
                         F.try_divide(F.col("votes") * F.lit(100.0),
                                      F.sum("votes").over(year)))
+
+def rated_movies(basics, ratings, min_votes=0) -> DataFrame:
+    """Films (titleType='movie') avec note, une ligne par tconst."""
+    movies = (basics.filter(F.col("titleType") == "movie")
+              .select("tconst", "primaryTitle", "originalTitle", "startYear"))
+    rated = (ratings.filter(F.col("averageRating").isNotNull()
+                            & (F.col("numVotes") >= min_votes))
+             .select("tconst", "averageRating", "numVotes"))
+    return movies.join(rated, "tconst", "inner")
 
 # --------------------------------------------------------------------- Q4
 def one_hit_directors(basics, ratings, crew, names, high=8.0, low=6.0,
