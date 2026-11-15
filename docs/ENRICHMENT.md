@@ -41,6 +41,22 @@ docker compose exec -T spark python -m jobs.enrichment.prepare_wikipedia
 
 Use `--run-id YYYYMMDDTHHMMSSZ` with either collection/preparation command to target a specific earlier run. Collection is serial and may take several hours on the full scope. Each record is saved as it completes. Rerunning collection reuses recorded successes and missing/ambiguous matches; failed API requests are retried. `--refresh` re-fetches records and bypasses the HTTP cache. Do not run simultaneous collectors against the same cache/run.
 
+On resume, `restoring_cache` means saved records are being reused, without rewriting existing nonempty raw files. Progress is printed and saved after every batch, including batches entirely served from cache. In `results/enrichment/<run_id>/collection_full.json`, `processed` includes reused records, `counts` describes the current attempt and `overall_status_counts` includes the underlying statuses of reused records. The previous attempt's summary is archived in `collection_history/`. `completed` means the request list has been traversed; check API errors and content coverage separately.
+
+An interrupt records `interrupted` when the process can handle it. Resume with the same scope and run ID after restarting Docker. File writes use unique temporary files and retry transient missing-path/permission errors; preparation reads only completed `*.json` records. Sleeping the computer still suspends network access and is not a background execution option.
+
+### View progress on Windows
+
+Double-click `scripts/Ouvrir-Suivi-Collecte.cmd`, or run the following from a second PowerShell window in the project directory:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Watch-Enrichment.ps1
+```
+
+The display refreshes every ten seconds. Add `-Once` for a single snapshot, or `-RunId 20261114T142005Z` to pin an existing run instead of following the current selection at launch. The viewer only reads `results/enrichment/<run_id>/collection_full.json`; it does not launch, stop or modify collection. Closing the viewer has no effect on the collector.
+
+The underlying report is updated by batches of fifty, so unchanged counters between refreshes are expected. The viewer shows the last checkpoint's age and warns after five minutes without a recent checkpoint; a report declaring `running` alone cannot establish whether the process is still alive. Collected HTML counts are separate from final Spark-cleaned text coverage.
+
 Requests use an identifying User-Agent, a minimum one-second interval, bounded retries, `Retry-After` delays and MediaWiki `maxlag=5`. HTTP responses are cached for 24 hours; per-entity snapshots persist until explicitly refreshed. Set `WIKIMEDIA_USER_AGENT` for a different identifying contact string. These behaviors follow [MediaWiki API etiquette](https://www.mediawiki.org/wiki/API:Etiquette) and [maxlag guidance](https://www.mediawiki.org/wiki/Manual:Maxlag_parameter). They remain subject to server-imposed throttling.
 
 ## Matching, text and lineage
@@ -49,7 +65,7 @@ Wikidata's query service resolves the exact IMDb identifier through property `P3
 
 The collector stores the API's original JSON/HTML, lookup URL, entity URI, article URL, request URL and retrieval timestamp. It performs HTTP routing and checkpointing, without cleaning article text. The Spark job enforces the raw schema, runs an HTML parser as a Spark UDF, and joins the results to the full target set.
 
-Film synopses contain the paragraphs of a `Plot`, `Synopsis`, `Plot synopsis`, `Plot summary` or `Story` section, including its subsections. A general film introduction is not substituted when that section is missing. Person biographies contain the article's introductory paragraphs before the first level-two heading. Infobox tables, scripts, superscript references and edit controls are excluded during Spark processing. Text is copied and normalized, not rewritten or summarized by an LLM.
+Film synopses contain the paragraphs of a `Plot`, `Synopsis`, `Plot synopsis`, `Plot summary`, `Story`, `Summary`, `Premise` or `Storyline` level-two section, including its subsections. Multiple nonempty recognized sections require review. A general film introduction is not substituted when that section is missing. Person biographies contain the article's introductory paragraphs before the first level-two heading. Infobox tables, scripts, superscript references and edit controls are excluded during Spark processing. Text is copied and normalized, not rewritten or summarized by an LLM.
 
 Each collected text retains the Wikipedia page ID, revision ID, revision permalink (`source_url`), retrieval timestamp, Wikidata URI and [Wikipedia's CC BY-SA 4.0 attribution link](https://creativecommons.org/licenses/by-sa/4.0/). Retain this lineage when using or exporting text.
 
@@ -63,7 +79,7 @@ The current clean snapshot contains:
 | `people` | `nconst` | `biography`, status and lineage |
 | `film_biography_coverage` | `tconst` | Count of distinct selected people with available biographies |
 
-Statuses include `available`, `pending`, `not_found`, `ambiguous_match`, `no_english_article`, `missing_plot_section`, `missing_biography_intro`, `api_error` and `missing_article_html`. Missing records keep their programmatic status; text is never fabricated.
+Statuses include `available`, `pending`, `not_found`, `ambiguous_match`, `no_english_article`, `missing_plot_section`, `ambiguous_plot_sections`, `missing_biography_intro`, `api_error` and `missing_article_html`. Missing records keep their programmatic status; text is never fabricated.
 
 The outputs retain the full selection even during a pilot. Consequently, most rows initially have `pending` status. `collection_attempted_for_all_targets` excludes pending requests and API failures; it does not assert that text was found. `full_enrichment_complete` requires available text for every target and at least three available biographies per film. Legitimate missing pages and the insufficient-principal list must be examined and reported before submission, even if the API traversal is finished.
 
@@ -79,3 +95,15 @@ people = spark.read.parquet(str(root / publication["path"] / "people"))
 ```
 
 Raw articles, cache files, Parquet outputs and summaries are ignored by Git. Commit the code and this guide; peers reproduce the data with the commands above. This branch depends on the seven-table preparation delivery until that PR is merged.
+
+## Reuse existing biographies for additional IMDb principals
+
+After final text preparation, [the cached-biography supplement](CACHED_BIOGRAPHIES.md) can add sourced associations for films below three available biographies, without new HTTP requests or changed text:
+
+```bash
+docker compose exec -T spark python -m jobs.enrichment.supplement_cached_biographies --run-id YYYYMMDDTHHMMSSZ
+```
+
+Replace the run ID with your actual selected run. Initial selections and rankings remain intact. A new snapshot records the added links separately and updates film-level coverage; unique biography counts stay unchanged. When present, the manifest's `film_people_path` identifies the effective associations, including supplements. Use this path for downstream coverage checks rather than only `selection/film_people`.
+
+For cached articles whose synopsis was not extracted, use the [conservative synopsis recovery guide](SYNOPSIS_RECOVERY.md). This targeted stage preserves existing texts and supplementary associations, makes no HTTP requests and records why a candidate was accepted or left for review.

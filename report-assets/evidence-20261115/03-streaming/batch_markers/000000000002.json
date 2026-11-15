@@ -1,0 +1,12 @@
+{
+  "batch_id": 2,
+  "session_id": "20261114T150245Z",
+  "rows_after_watermark_and_dedup": 41,
+  "invalid_rows": 0,
+  "distinct_article_titles": 41,
+  "matched_events": 2,
+  "matched_imdb_rows": 2,
+  "matched_events_in_live_window": 2,
+  "attempt_path": "attempts/000000000002-f628eed2",
+  "committed_at_utc": "2026-11-14T15:05:01.437558+00:00"
+}

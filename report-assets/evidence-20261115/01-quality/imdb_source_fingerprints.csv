@@ -1,0 +1,8 @@
+table,url,file,bytes,sha256,downloaded_at_utc,last_modified
+title.basics,https://datasets.imdbws.com/title.basics.tsv.gz,title.basics.tsv.gz,230354426,4f91f382c03fe35aba93ad93ad7158ef579774fc5da6e01f0a4f5e39624f152e,2026-11-14T09:57:26.023620+00:00,"Sat, 14 Nov 2026 00:42:24 GMT"
+title.ratings,https://datasets.imdbws.com/title.ratings.tsv.gz,title.ratings.tsv.gz,8753316,e42ddfc01d765ebb21ef3553930a4f6b23d9bd65fc2dd2e25947743655ce115c,2026-11-14T09:57:28.245145+00:00,"Sat, 14 Nov 2026 00:43:20 GMT"
+name.basics,https://datasets.imdbws.com/name.basics.tsv.gz,name.basics.tsv.gz,312953859,1471e6156b7459a9f4e76cf01306c9f0d2c1104c815a62b143e9fcde36713ee6,2026-11-14T11:13:08.662727+00:00,"Sat, 14 Nov 2026 00:43:24 GMT"
+title.crew,https://datasets.imdbws.com/title.crew.tsv.gz,title.crew.tsv.gz,84100054,34e54202d4acb48730e0e28f60594d3a35098175c58f4047f47f12dddab1d208,2026-11-14T11:13:23.541543+00:00,"Sat, 14 Nov 2026 00:43:03 GMT"
+title.episode,https://datasets.imdbws.com/title.episode.tsv.gz,title.episode.tsv.gz,55468235,5d0597394da76326d5cd0e79160d7e44defeb1e7d34642b98b7cbb2f727c5bea,2026-11-14T11:13:33.904775+00:00,"Sat, 14 Nov 2026 00:42:44 GMT"
+title.principals,https://datasets.imdbws.com/title.principals.tsv.gz,title.principals.tsv.gz,790704411,7d1a2389a1346a4e5e7f8e6f43a81cd82e675c00affad3602a9e8d3799ab86f8,2026-11-14T11:15:53.199347+00:00,"Sat, 14 Nov 2026 00:43:40 GMT"
+title.akas,https://datasets.imdbws.com/title.akas.tsv.gz,title.akas.tsv.gz,523098337,0b50407997c06a101633d3d100d8a6438e70815a3612436907bbc1cf2b82c015,2026-11-14T11:17:20.869076+00:00,"Sat, 14 Nov 2026 00:43:15 GMT"

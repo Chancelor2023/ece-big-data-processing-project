@@ -1,0 +1,9 @@
+table,category,field_or_reason,count,unit
+title.basics,field_correction,invalid_runtimeMinutes,4,field_occurrences
+name.basics,field_correction,deathYear_before_birthYear,28,field_occurrences
+name.basics,array_reference_removed,knownForTitles,68,reference_occurrences
+title.crew,array_reference_removed,directors,430,reference_occurrences
+title.crew,array_reference_removed,writers,1159,reference_occurrences
+title.episode,orphan_quarantine,parentTconst,5,rows_per_reference_check
+title.principals,orphan_quarantine,nconst,7262,rows_per_reference_check
+title.akas,orphan_quarantine,titleId,8,rows_per_reference_check

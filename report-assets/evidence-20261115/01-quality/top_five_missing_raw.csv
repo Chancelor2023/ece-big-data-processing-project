@@ -1,0 +1,6 @@
+table,stage,column,row_count,missing_count,missing_percent
+title.akas,raw,attributes,60424702,60107437,99.474942
+title.basics,raw,endYear,12963111,12798642,98.731254
+name.basics,raw,deathYear,15816005,15550475,98.321131
+name.basics,raw,birthYear,15816005,15130128,95.663399
+title.principals,raw,job,102756358,82882023,80.658778

@@ -10,71 +10,66 @@ Repository: [Chancelor2023/ece-big-data-processing-project](https://github.com/C
 | Contributor 1 / GitHub username | Jerry CHENG / Chancelor2023 |
 | Contributor 2 / GitHub username | Brett FAJGENBAUM / Brett273 |
 
-Start with [PROJECT.md](PROJECT.md) for installation, commands and environment details.
-[REPORT.md](REPORT.md) is a heading-only template for the group's own results and reasoning.
+Start with [PROJECT.md](PROJECT.md) for contributors, setup, processing order and operations. Complete the actual email addresses in its contributor table before submission. [REPORT.md](REPORT.md) remains the group’s own results and methodological write-up; its current template must be completed by the authors.
+
+## Delivery status
+
+Checked on 15 November 2026. Preparation, enrichment, streaming and evidence are merged into main; exploration and the open question remain incomplete.
+
+| Component | Current status |
+| --- | --- |
+| Environment and preparation | Seven complete IMDb tables, 78 before/after column profiles, quality and read-back checks validated |
+| Enrichment | Collection completed; cached-biography supplementation and synopsis recovery merged via #10/#11 |
+| Streaming | Real Wikipedia → Kafka → Spark test validated over fifteen minutes; 130 relevant events in the live window |
+| Evidence | Versioned bundle merged; #13 preserves exact bytes and adds an integrity verifier; published and fresh-clone checks passed |
+| Exploration Q1–Q3 | [PR #5](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/5) open; technical checks passed, documentation and approval pending |
+| Exploration Q4–Q8 | [PR #7](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/7) open; Q5/Q6 corrections and final validation pending |
+| Open question | Assigned to Brett; no delivered implementation or validated command |
+| Final report and reproduction | Personal write-up, contributor emails and complete integrated clean-clone execution pending |
+
+Historical enrichment coverage: 5,983/7,263 synopses, 8,055/11,443 unique biographies, 5,825 films with at least three biographies, and 5,329 with both synopsis and at least three biographies. These measurements are not a claim of complete coverage or guaranteed counts on newer sources.
+
+## Evidence and execution guides
+
+- [Evidence index](report-assets/evidence-20261115/INDEX.md): quality tables, coverage, missing cases, streaming metrics and source metadata.
+- [Sources](report-assets/evidence-20261115/SOURCES.csv), [manifest](report-assets/evidence-20261115/MANIFEST.json) and [evidence verification guide](docs/EVIDENCE_PACKAGE.md).
+- [Seven-table contract](docs/DATA_CONTRACT.md) and [remaining-table preparation](docs/REMAINING_TABLES.md).
+- [Enrichment](docs/ENRICHMENT.md), [cached biographies](docs/CACHED_BIOGRAPHIES.md) and [synopsis recovery](docs/SYNOPSIS_RECOVERY.md).
+- [Streaming execution and outputs](docs/STREAMING.md).
+
+After starting the environment as documented in PROJECT.md, verify the packaged evidence without Spark or network access:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.verify_evidence
+```
+
+Expected bundle counts: 64 manifest entries, 63 checksum entries, 48 source copies and 18 CSVs, with `status: passed`. This check does not reproduce the processing pipeline. For a full new run, follow PROJECT.md in order; use your own selection/run IDs and run one Spark application at a time. After base text preparation, apply biography supplementation before synopsis recovery.
 
 ## Layout
 
 ```text
-compose.yaml               Kafka and a local Spark/Jupyter environment
-docker/spark/              Reproducible Python/Spark image and configuration
-src/imdb_pipeline/         Shared settings and Spark session factory
-jobs/create_topics.py      Explicit, repeatable project-topic creation
-jobs/smoke_test.py         Synthetic end-to-end environment verification
-jobs/preparation/          Download, profile and prepare the seven IMDb tables
-docs/REMAINING_TABLES.md   Prepare the five remaining IMDb tables and global profile
-docs/DATA_CONTRACT.md      Published schemas and loading interface
-jobs/exploration/          Future answers to the eight exploration questions
-jobs/enrichment/           IMDb target selection, Wikipedia collection and Spark enrichment
-jobs/streaming/            Future live Wikimedia processing
-jobs/open_question/        Future additional analysis
-notebooks/                Interactive development
-data/                     Local inputs, cleaned tables and checkpoints
-results/                  Local outputs grouped by project section
-logs/                     Local execution logs
+compose.yaml               Local Kafka and Spark/Jupyter environment
+docker/spark/              Image and Spark configuration
+src/imdb_pipeline/         Shared configuration, data contracts and transformations
+jobs/create_topics.py      Repeatable topic creation
+jobs/smoke_test.py         Synthetic environment verification
+jobs/preparation/          Download, profile and clean seven IMDb tables
+jobs/enrichment/           Select, collect, prepare and improve external text
+jobs/streaming/            Live Wikipedia producer and Spark consumer
+jobs/reporting/            Evidence export and exact-byte verification
+jobs/exploration/          Q1–Q8 modules remain in PRs #5/#7
+jobs/open_question/        Placeholder; additional analysis pending
+docs/                      Execution and data-contract guides
+report-assets/             Deliberately versioned factual evidence
+notebooks/                 Interactive environment
+data/                      Ignored inputs, Parquet, cache and checkpoints
+results/                   Ignored complete runtime outputs
+logs/                      Ignored execution logs
 ```
 
-Data and generated outputs are ignored by Git. Include selected final outputs in the report or a deliberately versioned report-assets directory when preparing the submission.
+Raw archives, article bodies, Parquet, caches, credentials and checkpoints are excluded from Git. The selected factual evidence in report-assets is intentionally versioned; Git attributes preserve its exact source bytes and line endings. Keep the historical bundle unchanged when producing a newer snapshot.
 
-## First IMDb data delivery
+## Collaboration and submission
 
-Run the three preparation commands in [PROJECT.md](PROJECT.md#prepare-the-first-two-imdb-tables) to download, test and prepare the first two tables. [The data contract](docs/DATA_CONTRACT.md) documents types, missing values, row handling and how both tables are loaded from one validated snapshot.
+Use one feature branch per task and obtain a peer review and formal approval before merging its PR. No direct commits to main. Comments such as “All good” and a merge action are not formal GitHub approvals. Historical review-trace gaps remain to be clarified; do not describe later reviews as having preceded a merge.
 
-For people, crews, episodes, credits and aliases, follow [the remaining-table guide](docs/REMAINING_TABLES.md). It describes the five-table preparation, resumable runs and the final seven-table catalog.
-
-For the film/person text pilot and full collection commands, follow [the enrichment guide](docs/ENRICHMENT.md).
-
-## Collaboration
-
-Use one feature branch per task. Each pull request requires review and approval by the other group member before merging. No direct commits to `main`.
-
-The initial environment is developed on `feature/bootstrap-environment` and submitted for review against `main`. The repository's starting point is an empty history-initialization commit: all project files enter `main` through the reviewed pull request.
-
-## How to change
-
-Parameters are not exposed on the command line. To change a value, edit
-`jobs/exploration/params.py` (a `Params` dataclass instantiated with its
-defaults by the runner) and rerun.
-
-## Validation
-
-    python -m jobs.exploration.run
-    python -m pytest tests/test_exploration.py
-
-Both commands run inside the project container (Python, Spark and Java are
-not installed on the host). <prefix with your container command>
-
-## Catalogue
-
-Catalog `20261114T174336Z-d9d2e91f` (`data/clean/current.json`). It is a
-composite catalog: `title.basics` (12,963,111 rows) and `title.ratings`
-(1,732,169 rows) come from base run `20261114T171444Z-8c0fefb2`, built from
-IMDb dumps downloaded on 2026-11-14. Output directories are named after the
-catalog ID, not the base run ID.
-
-## Output
-
-The output directory name is the `run_id` field of `data/clean/current.json`
-(`unknown-run` if the field is absent). The exploration job does not
-generate its own ID: rerunning against the same catalog overwrites the
-three output directories.

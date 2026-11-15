@@ -2,14 +2,33 @@
 
 ## Contributors
 
-| Contributor | GitHub username |
+| Contributor | GitHub username | Email |
 | --- | --- | --- |
-| Jerry | Chancelor2023 |
-| Brett | Brett273 |
+| Jerry CHENG | Chancelor2023 | To be completed by Jerry |
+| Brett FAJGENBAUM | Brett273 | To be completed by Brett |
+
+Class group: Ing5 Gr3. Complete the actual email addresses before submission.
 
 ## Environment scope
 
-This setup provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab, persistent local files, explicit topic creation and a synthetic integration test. Preparation jobs for the complete `title.basics` and `title.ratings` source files are available. Other IMDb tables, analytical answers, enrichment and live Wikimedia ingestion remain to be implemented.
+The project provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab and persistent local data. All seven IMDb tables have download, profiling, cleaning, quarantine and publication jobs. Film/person enrichment and live Wikipedia ingestion are implemented.
+
+Delivery status checked on 15 November 2026 (Europe/Paris):
+
+| Component | Delivery and remaining work |
+| --- | --- |
+| Environment and seven-table preparation | Merged into `main` through PRs #1–#3; full-source execution validated |
+| Wikipedia → Kafka → Spark | PR #4 merged; a real 15-minute session was validated |
+| Film/person enrichment | PR #6 merged; full collection completed, final Spark preparation and coverage checks passed |
+| Collection resume and Windows progress viewer | PR #8 merged, including the execution guide from #9 |
+| Cached biographies and synopsis recovery | PRs #10 and #11 merged; 916 supplementary associations and 102 recovered synopses |
+| Versioned evidence and integrity | #12 included through #11; #13 merged; published hashes and a fresh-clone evidence check passed |
+| Exploration Q1–Q3 | PR #5 open, `69da2b4`; six tests and full-data execution passed; documentation and approval pending |
+| Exploration Q4–Q8 | PR #7 open, `beebb2d`; Q5/Q6 corrections and final validation pending; two Q6 tests fail and the announced regression module is absent |
+| Open question and integrated clean-clone run | No delivered open-question implementation; complete end-to-end reproduction pending |
+| Report and contributor contacts | REPORT.md still needs the group’s results and own reasoning; actual email addresses remain to be completed |
+
+Preparation, enrichment, streaming and evidence are integrated in `main`; exploration remains in PRs #5/#7. Commands for an unmerged component require its branch. The completed collection does not imply complete text coverage. The fresh-clone check validated evidence integrity only, not all processing stages. Run the full end-to-end check after the remaining components are integrated. Do not switch or replace the mounted checkout while a job is running.
 
 Spark runs in `local[2]` mode inside one container, as in a local lab. This is not a multi-node Spark cluster. Kafka uses one KRaft broker/controller with persistent storage and no ZooKeeper.
 
@@ -34,20 +53,27 @@ Direct Python dependencies and application versions are pinned. Base-image tags,
 - No host-side Python, Java, Spark or Kafka installation is required.
 - Native amd64 and arm64 Linux base images are used; no architecture emulation is forced.
 
-Run every command below from the `imdb-big-data` directory.
+Run every command below from the repository directory (called `imdb-big-data` on Jerry's machine). For a new checkout:
+
+```bash
+git clone https://github.com/Chancelor2023/ece-big-data-processing-project.git
+cd ece-big-data-processing-project
+```
+
+The repository name does not affect the commands; the working directory must contain `compose.yaml`. Generated inputs, outputs and `.env` are local and must be recreated on a new machine. Full compressed sources, expanded TSV files, Parquet snapshots and temporary Spark files need substantially more space than the environment-only disk budget above.
 
 ## First startup
 
-PowerShell:
+Create `.env` only on first setup; preserve an existing local configuration. PowerShell:
 
 ```powershell
-Copy-Item .env.example .env
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 ```
 
 Linux / macOS / Git Bash:
 
 ```bash
-cp .env.example .env
+test -f .env || cp .env.example .env
 ```
 
 Choose your own `JUPYTER_TOKEN` in `.env`. For a generated token using Docker:
@@ -95,15 +121,9 @@ spark.range(10).show()
 spark.stop()
 ```
 
-Shared code lives in `src/imdb_pipeline`, which is on the container's Python path. New runnable jobs can be placed in the corresponding `jobs` section and invoked as modules, for example:
+Shared code lives in `src/imdb_pipeline`, which is on the container's Python path. Runnable modules are grouped under `jobs/preparation`, `jobs/enrichment` and, on the integrated branch, `jobs/streaming` and `jobs/exploration`. Use the shared Spark factory for consistent master, shuffle partitions and UTC handling.
 
-```bash
-docker compose exec -T spark python -m jobs.preparation.your_module
-```
-
-That example is a naming convention for a future module, not a currently implemented command. Use the shared Spark factory so that master, shuffle partitions and UTC handling remain consistent. Plain `SparkSession.builder` also loads the connector through `spark-defaults.conf`, but does not read the project's `SPARK_MASTER` override unless you set it yourself.
-
-Only one Spark application binds to UI port 4040 at a time. Stop an unused notebook Spark session before launching another job if you need its UI at that address. Additional Spark UIs can use other container ports that are not published in this initial setup.
+Run only one Spark application at a time within the default 4 GB container / 2 GB driver budget. Stop unused notebook Spark sessions before batch jobs or the streaming consumer. The HTTP enrichment collector does not start a Spark JVM and can run alongside one Spark application. Its progress viewer only reads a small JSON file.
 
 ## Persistence and inputs
 
@@ -143,7 +163,198 @@ Use `data/raw` for downloaded IMDb source files, `data/clean` for the shared cle
 
 `jobs.create_topics` creates `wikimedia.recentchange` with three partitions and replication factor one. It can be rerun without deleting the topic or resetting its offsets.
 
+## Prepare the five remaining IMDb tables
+
+Run after the first two tables have been published:
+
+```bash
+docker compose exec -T spark python -m jobs.preparation.download_remaining
+docker compose exec -T spark python -m unittest tests.test_preparation tests.test_other_preparation -v
+docker compose exec -T spark python -m jobs.preparation.prepare_remaining
+```
+
+This adds `name.basics`, `title.crew`, `title.episode`, `title.principals` and `title.akas`. The final `data/clean/current.json` references all seven validated tables. Its quality report under `results/quality/<run_id>/` includes 39 source columns profiled before/after cleaning (78 profile rows), the global top-five missing columns and traceable corrections/quarantines.
+
+Read [the seven-table guide](docs/REMAINING_TABLES.md) for restart with `--resume-run RUN_ID`, source checks and partition tuning. The loader defaults to basics/ratings; explicitly request additional tables:
+
+```python
+tables = load_clean_tables(spark, names=(
+    "title.basics", "title.ratings", "name.basics", "title.crew",
+    "title.episode", "title.principals", "title.akas",
+))
+```
+
+The local full catalog validated on 14 November is `20261114T115800Z-6c04bdd1`. A new reproduction creates its own run IDs and source fingerprints.
+
+## Film and person enrichment
+
+Read [the enrichment guide](docs/ENRICHMENT.md) for selection rules, provenance and outputs. On a new reproduction, after seven-table preparation:
+
+```bash
+docker compose exec -T spark python -m unittest tests.test_enrichment -v
+docker compose exec -T spark python -m jobs.enrichment.select_targets
+docker compose exec -T spark python -m jobs.enrichment.collect_wikipedia
+docker compose exec -T spark python -m jobs.enrichment.prepare_wikipedia
+```
+
+Selection covers 1980–2025 and up to ten films per genre/year, ordered by vote count with deterministic tie-breaking. Collection initially covers a pilot of three films and their selected people. Text comes from existing English Wikipedia content; Spark performs schema enforcement, text extraction/cleaning and joins. Records retain revision URLs, retrieval times and source provenance.
+
+To continue that same selection on the full scope:
+
+```bash
+docker compose exec -T spark python -m jobs.enrichment.collect_wikipedia --scope full
+```
+
+Do not rerun `select_targets` to resume collection: it creates a new run. Jerry’s completed selection is `20261114T142005Z`, containing 7,263 films and 11,443 unique people (18,706 requests). Its full collection is finished and does not need restarting. The following commands illustrate resuming that run after an interruption; use your own run ID for a new reproduction:
+
+```bash
+docker compose up -d
+docker compose exec -T spark python -m jobs.enrichment.collect_wikipedia --scope full --run-id 20261114T142005Z
+```
+
+Use only one collector per run/cache. Saved successes and missing/ambiguous matches are reused; API failures are retried. `--refresh` deliberately bypasses that reuse and is not a normal resume option. The resume improvements and viewer are included in `main` through #8.
+
+### View collection progress on Windows
+
+Double-click `scripts/Ouvrir-Suivi-Collecte.cmd`, or run from a second PowerShell window:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Watch-Enrichment.ps1
+```
+
+Add `-Once` for a single snapshot or `-RunId 20261114T142005Z` to select this existing run explicitly. The viewer refreshes every ten seconds and reads `results/enrichment/<run_id>/collection_full.json`. It does not control the collector. Closing the viewer does not stop collection; counters are checkpointed by batches of fifty, so short plateaus are normal. The timestamp and stale-checkpoint warning help distinguish a recent checkpoint from an old report; `running` in a file alone does not prove process liveness.
+
+### Stop and resume collection
+
+In the terminal actually running the collector, interrupt with Ctrl+C and wait for it to return. If it was started elsewhere, first identify its PID from a second terminal:
+
+```bash
+docker compose exec -T spark ps -eo pid,etime,stat,args
+```
+
+Send `kill -INT PID` inside the Spark container only to the identified collector process, replacing `PID` with its current numeric identifier. Wait for it to stop before sleeping the laptop or stopping Docker. Resume with the same scope/run ID afterward. Sleep suspends network access; Docker restart does not automatically restart an exec-launched collector. Avoid source changes or branch switching underneath running jobs.
+
+### Publish cleaned text and coverage after collection
+
+```bash
+docker compose exec -T spark python -m jobs.enrichment.prepare_wikipedia --run-id 20261114T142005Z
+```
+
+For a new reproduction, use its own run ID, or omit `--run-id` to use its current selection. Inspect `results/enrichment/<run_id>/coverage.json`; `data/enrichment/runs/<run_id>/current_content.json` points to the cleaned `films`, `people` and `film_biography_coverage` Parquet outputs. Finishing the request list does not imply that all synopses/biographies exist. Inspect API failures, missing pages, absent plot sections and per-film biography coverage.
+
+Fifty-three selected films have fewer than three distinct IMDb principals. The [principal-shortfall audit](docs/PRINCIPAL_SHORTFALLS.md) is read-only and preserves active inputs:
+
+```bash
+docker compose exec -T spark python -m jobs.enrichment.audit_principal_shortfalls --wikidata
+```
+
+Supplemental credit proposals are separate from the active collection and do not prove that three biographies are available. Preserve and report these limitations explicitly.
+
+### Apply the cached-text improvements
+
+Run after the full collection and its base `prepare_wikipedia` publication, in this order. Omit `--run-id` to use the current selection in your own reproduction:
+
+```bash
+docker compose exec -T spark python -m unittest tests.test_cached_biography_supplements tests.test_enrichment tests.test_synopsis_recovery -v
+docker compose exec -T spark python -m jobs.enrichment.supplement_cached_biographies
+docker compose exec -T spark python -m jobs.enrichment.recover_synopses
+```
+
+For an explicitly chosen existing run, both jobs accept `--run-id 20261114T142005Z`. They reuse cached text without HTTP requests. The original selection and existing text are preserved; effective associations include the cached-biography supplements. Rerunning an already applied improvement returns `already_published` without creating another snapshot. Running base `prepare_wikipedia` again creates an unsupplemented publication, so apply the two improvements afterward if that is intended.
+
+Read [cached biographies](docs/CACHED_BIOGRAPHIES.md) and [synopsis recovery](docs/SYNOPSIS_RECOVERY.md) for output paths, guards and provenance. Downstream readers must use `current_content.json`'s `film_people_path` when present, with the initial selection as fallback. The synopsis snapshot retains associations from the supplement snapshot.
+
+Measured coverage for completed selection `20261114T142005Z`, final content snapshot `20261115T105744Z-c082eb`:
+
+| Metric | Observed result |
+| --- | --- |
+| Films / unique people targeted | 7,263 / 11,443 |
+| Available synopses | 5,983 / 7,263 (82.38%) |
+| Available unique biographies | 8,055 / 11,443 (70.39%) |
+| Films with at least three biographies | 5,825 / 7,263 (80.20%) |
+| Films with synopsis and at least three biographies | 5,329 / 7,263 (73.37%) |
+| Supplementary associations / recovered synopses | 916 / 102 |
+
+These are historical measurements, not guaranteed counts for a later IMDb/Wikipedia snapshot. Missing text and insufficient-person cases remain explicit. See [coverage progression](report-assets/evidence-20261115/02-enrichment/coverage_progression.csv), [status counts](report-assets/evidence-20261115/02-enrichment/status_counts.csv) and [remaining cases](report-assets/evidence-20261115/INDEX.md). Reusing a biography increases associations, not the number of unique biography texts.
+
+## Evidence and integrity verification
+
+Start with the [evidence index](report-assets/evidence-20261115/INDEX.md). It links all seven table counts, 78 column profiles, enrichment coverage and missing cases, streaming metrics and source metadata. [SOURCES.csv](report-assets/evidence-20261115/SOURCES.csv) records original files and URLs; [MANIFEST.json](report-assets/evidence-20261115/MANIFEST.json) and [SHA256SUMS.txt](report-assets/evidence-20261115/SHA256SUMS.txt) record exact bytes.
+
+Verify the versioned bundle without Spark, collection or network access:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.verify_evidence
+```
+
+With host-side Python available, `python -m jobs.reporting.verify_evidence` also works from the repository root. Expected results for this bundle: `status: passed`, 64 manifest entries, 63 checksum entries, 48 source copies and 18 CSVs. These checks passed on the published fix commit `ca83520` and a fresh clone; after #13 merged into `main` (`1ff95ba`), the evidence subtree, Git attributes and verifier were confirmed identical to that commit. This is an evidence-integrity check, not the complete clean-clone execution of all processing stages.
+
+Git preserves exact evidence bytes with `report-assets/** -text`. Keep original CRLF or LF record terminators as recorded by the hashes. Raw archives, article bodies, Parquet datasets, caches, credentials and checkpoints remain excluded; selected factual report assets are deliberately versioned.
+
+To create a new evidence snapshot from existing validated local outputs:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.prepare_evidence --output report-assets/NEW-EVIDENCE-DIRECTORY
+```
+
+Choose a new destination; the exporter refuses to overwrite an existing bundle. See [the evidence guide](docs/EVIDENCE_PACKAGE.md). Keep the existing historical bundle unchanged when reproducing results on newer sources.
+
+## Live Wikipedia → Kafka → Spark
+
+This component is merged on `main`. See [the streaming execution guide](docs/STREAMING.md) for outputs, matching, checkpoints and late-data behavior.
+
+After table preparation and service startup:
+
+```bash
+docker compose exec -T spark python -m jobs.create_topics
+docker compose exec -T spark python -m unittest tests.test_streaming -v
+docker compose exec -T spark python -m jobs.streaming.verify_lookup
+```
+
+In terminal 1, start the producer for 20 minutes:
+
+```bash
+docker compose exec -T spark python -m jobs.streaming.produce_recent_changes --duration-seconds 1200 --state-name wikipedia-producer
+```
+
+In terminal 2, start the consumer for 15 minutes:
+
+```bash
+docker compose exec -T spark python -m jobs.streaming.consume_recent_changes --run-id wikipedia-live --duration-seconds 900
+```
+
+Use one producer per state name and one consumer per run ID. A repeated run ID resumes its checkpoint; use a new ID for an independent test or changed configuration. Keep checkpoint files under `data/checkpoints/streaming/` with their result markers under `results/streaming/<run_id>/`. Read only committed attempts referenced by `batches/` markers. Session summaries are under `sessions/`; Spark progress metrics are under `progress/`.
+
+The validated session `live-validation-20261114-v2` / `20261114T150245Z` lasted about 900.6 seconds and captured 130 distinct relevant live events in its window. This is a prior measured run, not a promise of identical future traffic. A fresh reproduction must inspect its own metrics. Matching uses exact English sitelinks → Wikidata IMDb IDs → cleaned title/person keys. The implementation uses a five-minute watermark and bounded deduplication; methodological discussion belongs to the members' own report.
+
+## Exploration and open question
+
+Exploration code is not yet merged. [PR #5](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/5), `69da2b4`, implements Q1–Q3; six tests and full-data execution passed, with documentation and approval pending. [PR #7](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/7), `beebb2d`, implements Q4–Q8; season-zero handling in Q5 and the original-language source in Q6 remain to be corrected. Its two revised Q6 tests fail against the published implementation, and the announced `tests.test_q5_q6_regression` module is absent. These are the last reviewed versions, not a successful final Q4–Q8 run.
+
+On a checkout containing the exploration modules, the provided entry points are:
+
+```bash
+docker compose exec -T spark python -m unittest tests.test_exploration -v
+docker compose exec -T spark python -m unittest tests.test_exploration_q4_q8 -v
+docker compose exec -T spark python -m jobs.exploration.run
+```
+
+These commands identify the PR interfaces; use them only on a checkout containing those modules. Successful corrected Q4–Q8 execution on the full cleaned catalog is still to be validated.
+
+The agreed Q6 input contract is one distinct `(tconst, language)` pair per row, with Wikidata language IDs from P364, exact IMDb P345 matching, provenance and explicit missing/ambiguous coverage. A multilingual film contributes all its declared languages. No alternative-title language fallback is accepted. Collection must cover all Q6-eligible films, not just the enrichment top-ten selection. The corrected code must produce lists for at least two and at least three languages. No arbitrary numerical coverage threshold was proposed; a final Q6 validation still requires completed collection, successful controls, results and coverage, and cannot treat zero coverage as an answered question. An explicit `pending` Q6 mode may validate the other questions separately, not the entire Q4–Q8 delivery. Implementation and final commands remain Brett’s pending work; no P364 collector command is supplied here before it exists.
+
+The open question is assigned to Brett and has no delivered implementation or validated entry point yet. Its final command and outputs must be added before submission.
+
+## Final reproduction and collaboration
+
+- Follow environment startup, both table-preparation stages, enrichment selection/pilot/full collection/base preparation, cached-biography supplementation, synopsis recovery, then the integrated exploration, live-streaming test and open question. Stop each Spark application before starting another.
+- Brett performs the complete clean-clone check once the remaining components are corrected and integrated. Run `docker compose exec -T spark python -m unittest discover -s tests -v`, then the documented processing stages. Preserve the tested commit, actual commands, exit codes, output paths, run IDs, source fingerprints and coverage. The evidence-only clone check is complete; the integrated processing check remains pending.
+- Each task uses a feature branch and a PR approved by the other group member before merging. Keep `main` and active PR branches; after a PR is merged and its changes verified on `main`, its remote feature branch can be deleted while retaining commits and PR history. Do not delete branches with active work or open PRs.
+- `REPORT.md` results and methodological reasoning remain the members’ own work. Complete actual contributor emails, report sections, exploration outputs and the open question before submission. Use repository-relative links to versioned evidence in the report; local ignored data/results paths are not accessible to the grader. Follow the course README for the submission email once the project is ready.
+
 ## Stop and restart
+
+First stop active collection/streaming jobs gracefully. Service restart alone does not resume exec-launched Python processes.
 
 ```bash
 docker compose stop
@@ -177,8 +388,6 @@ docker compose exec -T spark python -m jobs.smoke_test
 - Change `requirements.txt`, Dockerfile or `spark-defaults.conf`: rebuild the Spark image. Normal source edits are immediately visible through the workspace mount.
 
 ## AI assistance declaration
-
-For the title-table preparation task, OpenAI Codex also assisted with download/preparation code, the table-loading helper, transformation tests and technical data-contract documentation. The group remains responsible for its own methodological reasoning in `REPORT.md`.
 
 OpenAI Codex was used to create the initial project structure and configuration, and tasks repartition between members. No analytical results or methodological reasoning for `REPORT.md` have been generated in this setup.
 

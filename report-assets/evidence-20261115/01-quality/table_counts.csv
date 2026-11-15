@@ -1,0 +1,8 @@
+table,source_rows,clean_rows,rows_removed,rejected_rows,duplicate_rows_quarantined,read_back_validated,key_validated_recorded
+title.basics,12963111,12963111,0,0,0,True,not_separately_recorded
+title.ratings,1732169,1732169,0,0,0,True,not_separately_recorded
+name.basics,15816005,15816005,0,0,0,True,True
+title.crew,12963111,12963111,0,0,0,True,True
+title.episode,10034862,10034857,5,0,0,True,True
+title.principals,102756358,102749096,7262,0,0,True,True
+title.akas,60424702,60424694,8,0,0,True,True

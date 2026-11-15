@@ -1,0 +1,17 @@
+{
+  "run_id": "20261114T142005Z",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "selection": "titleType=movie; 1980<=startYear<=2025; numVotes>0; known genre",
+  "ranking": "numVotes DESC, averageRating DESC NULLS LAST, tconst ASC",
+  "per_genre_year": 10,
+  "principals_per_film": 3,
+  "people_order": "minimum IMDb ordering per distinct person, then nconst",
+  "film_genre_year_rows": 10277,
+  "unique_films": 7263,
+  "film_person_links": 21695,
+  "unique_people": 11443,
+  "films_with_fewer_than_three_people": 53,
+  "pilot_films": 3,
+  "pilot_requests": 12,
+  "full_enrichment_complete": false
+}

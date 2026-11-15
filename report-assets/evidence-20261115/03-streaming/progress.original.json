@@ -1,0 +1,2461 @@
+[
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:03:13.548Z",
+    "batchId": 0,
+    "batchDuration": 61276,
+    "numInputRows": 499,
+    "inputRowsPerSecond": 0.0,
+    "processedRowsPerSecond": 8.143481950518963,
+    "durationMs": {
+      "addBatch": 56179,
+      "commitOffsets": 736,
+      "getBatch": 158,
+      "latestOffset": 1491,
+      "queryPlanning": 2102,
+      "triggerExecution": 61270,
+      "walCommit": 582
+    },
+    "eventTime": {
+      "avg": "2026-11-14T14:58:53.525Z",
+      "max": "2026-11-14T15:02:16.000Z",
+      "min": "2026-11-14T14:55:23.000Z",
+      "watermark": "1970-01-01T00:00:00.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 499,
+        "numRowsUpdated": 499,
+        "allUpdatesTimeMs": 451,
+        "numRowsRemoved": 0,
+        "allRemovalsTimeMs": 25,
+        "commitTimeMs": 1594,
+        "memoryUsedBytes": 113928,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 0,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 112776
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": null,
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 160,
+            "1": 168,
+            "2": 171
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 194,
+            "1": 204,
+            "2": 207
+          }
+        },
+        "numInputRows": 499,
+        "inputRowsPerSecond": 0.0,
+        "processedRowsPerSecond": 8.143481950518963,
+        "metrics": {
+          "avgOffsetsBehindLatest": "35.333333333333336",
+          "maxOffsetsBehindLatest": "36",
+          "minOffsetsBehindLatest": "34"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:04:14.860Z",
+    "batchId": 1,
+    "batchDuration": 26290,
+    "numInputRows": 194,
+    "inputRowsPerSecond": 3.164144050104384,
+    "processedRowsPerSecond": 7.379231647014074,
+    "durationMs": {
+      "addBatch": 25254,
+      "commitOffsets": 402,
+      "getBatch": 1,
+      "latestOffset": 13,
+      "queryPlanning": 94,
+      "triggerExecution": 26290,
+      "walCommit": 506
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:03:08.231Z",
+      "max": "2026-11-14T15:04:13.000Z",
+      "min": "2026-11-14T15:02:04.000Z",
+      "watermark": "2026-11-14T14:57:16.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 693,
+        "numRowsUpdated": 194,
+        "allUpdatesTimeMs": 629,
+        "numRowsRemoved": 0,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2472,
+        "memoryUsedBytes": 181400,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 8,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 158776
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 160,
+            "1": 168,
+            "2": 171
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 221,
+            "1": 230,
+            "2": 242
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 221,
+            "1": 230,
+            "2": 242
+          }
+        },
+        "numInputRows": 194,
+        "inputRowsPerSecond": 3.164144050104384,
+        "processedRowsPerSecond": 7.379231647014074,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:04:41.152Z",
+    "batchId": 2,
+    "batchDuration": 20886,
+    "numInputRows": 41,
+    "inputRowsPerSecond": 1.5594097063745624,
+    "processedRowsPerSecond": 1.9630374413482716,
+    "durationMs": {
+      "addBatch": 19829,
+      "commitOffsets": 517,
+      "getBatch": 0,
+      "latestOffset": 11,
+      "queryPlanning": 38,
+      "triggerExecution": 20885,
+      "walCommit": 483
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:04:22.975Z",
+      "max": "2026-11-14T15:04:40.000Z",
+      "min": "2026-11-14T15:03:52.000Z",
+      "watermark": "2026-11-14T14:59:13.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 734,
+        "numRowsUpdated": 41,
+        "allUpdatesTimeMs": 479,
+        "numRowsRemoved": 0,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1958,
+        "memoryUsedBytes": 201112,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 16,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 158984
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 221,
+            "1": 230,
+            "2": 242
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 234,
+            "1": 243,
+            "2": 257
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 234,
+            "1": 243,
+            "2": 257
+          }
+        },
+        "numInputRows": 41,
+        "inputRowsPerSecond": 1.5594097063745624,
+        "processedRowsPerSecond": 1.9630374413482716,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:05:02.040Z",
+    "batchId": 3,
+    "batchDuration": 20011,
+    "numInputRows": 26,
+    "inputRowsPerSecond": 1.24473381846036,
+    "processedRowsPerSecond": 1.2992853930338315,
+    "durationMs": {
+      "addBatch": 18905,
+      "commitOffsets": 500,
+      "getBatch": 1,
+      "latestOffset": 14,
+      "queryPlanning": 40,
+      "triggerExecution": 20010,
+      "walCommit": 545
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:04:47.500Z",
+      "max": "2026-11-14T15:04:59.000Z",
+      "min": "2026-11-14T15:04:30.000Z",
+      "watermark": "2026-11-14T14:59:40.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 760,
+        "numRowsUpdated": 26,
+        "allUpdatesTimeMs": 588,
+        "numRowsRemoved": 0,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2090,
+        "memoryUsedBytes": 202456,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 24,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 164056
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 234,
+            "1": 243,
+            "2": 257
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 244,
+            "1": 252,
+            "2": 264
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 244,
+            "1": 252,
+            "2": 264
+          }
+        },
+        "numInputRows": 26,
+        "inputRowsPerSecond": 1.24473381846036,
+        "processedRowsPerSecond": 1.2992853930338315,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:05:30.001Z",
+    "batchId": 4,
+    "batchDuration": 20483,
+    "numInputRows": 37,
+    "inputRowsPerSecond": 1.3232716998676728,
+    "processedRowsPerSecond": 1.8063760191378215,
+    "durationMs": {
+      "addBatch": 19243,
+      "commitOffsets": 550,
+      "getBatch": 0,
+      "latestOffset": 17,
+      "queryPlanning": 32,
+      "triggerExecution": 20483,
+      "walCommit": 637
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:05:10.972Z",
+      "max": "2026-11-14T15:05:26.000Z",
+      "min": "2026-11-14T15:04:59.000Z",
+      "watermark": "2026-11-14T14:59:59.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 797,
+        "numRowsUpdated": 37,
+        "allUpdatesTimeMs": 518,
+        "numRowsRemoved": 0,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2013,
+        "memoryUsedBytes": 210272,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 32,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 175072
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 244,
+            "1": 252,
+            "2": 264
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 256,
+            "1": 264,
+            "2": 277
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 256,
+            "1": 264,
+            "2": 277
+          }
+        },
+        "numInputRows": 37,
+        "inputRowsPerSecond": 1.3232716998676728,
+        "processedRowsPerSecond": 1.8063760191378215,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:06:00.001Z",
+    "batchId": 5,
+    "batchDuration": 22658,
+    "numInputRows": 45,
+    "inputRowsPerSecond": 1.5,
+    "processedRowsPerSecond": 1.986053491040692,
+    "durationMs": {
+      "addBatch": 21492,
+      "commitOffsets": 488,
+      "getBatch": 1,
+      "latestOffset": 30,
+      "queryPlanning": 29,
+      "triggerExecution": 22658,
+      "walCommit": 613
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:05:40.466Z",
+      "max": "2026-11-14T15:05:58.000Z",
+      "min": "2026-11-14T15:05:26.000Z",
+      "watermark": "2026-11-14T15:00:26.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 840,
+        "numRowsUpdated": 45,
+        "allUpdatesTimeMs": 462,
+        "numRowsRemoved": 2,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2207,
+        "memoryUsedBytes": 225264,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 40,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 180632
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 256,
+            "1": 264,
+            "2": 277
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 270,
+            "1": 276,
+            "2": 296
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 270,
+            "1": 276,
+            "2": 296
+          }
+        },
+        "numInputRows": 45,
+        "inputRowsPerSecond": 1.5,
+        "processedRowsPerSecond": 1.986053491040692,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:06:30.000Z",
+    "batchId": 6,
+    "batchDuration": 22079,
+    "numInputRows": 33,
+    "inputRowsPerSecond": 1.1000366678889297,
+    "processedRowsPerSecond": 1.494632909099144,
+    "durationMs": {
+      "addBatch": 20757,
+      "commitOffsets": 636,
+      "getBatch": 0,
+      "latestOffset": 25,
+      "queryPlanning": 31,
+      "triggerExecution": 22077,
+      "walCommit": 624
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:06:12.757Z",
+      "max": "2026-11-14T15:06:27.000Z",
+      "min": "2026-11-14T15:05:59.000Z",
+      "watermark": "2026-11-14T15:00:58.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 838,
+        "numRowsUpdated": 33,
+        "allUpdatesTimeMs": 557,
+        "numRowsRemoved": 35,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2195,
+        "memoryUsedBytes": 231304,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 48,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 181008
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 270,
+            "1": 276,
+            "2": 296
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 279,
+            "1": 291,
+            "2": 305
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 279,
+            "1": 291,
+            "2": 305
+          }
+        },
+        "numInputRows": 33,
+        "inputRowsPerSecond": 1.1000366678889297,
+        "processedRowsPerSecond": 1.494632909099144,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:07:00.001Z",
+    "batchId": 7,
+    "batchDuration": 21608,
+    "numInputRows": 35,
+    "inputRowsPerSecond": 1.166627779074031,
+    "processedRowsPerSecond": 1.6197704553868937,
+    "durationMs": {
+      "addBatch": 20540,
+      "commitOffsets": 256,
+      "getBatch": 0,
+      "latestOffset": 46,
+      "queryPlanning": 24,
+      "triggerExecution": 21608,
+      "walCommit": 734
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:06:43.314Z",
+      "max": "2026-11-14T15:06:57.000Z",
+      "min": "2026-11-14T15:06:28.000Z",
+      "watermark": "2026-11-14T15:01:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 839,
+        "numRowsUpdated": 35,
+        "allUpdatesTimeMs": 542,
+        "numRowsRemoved": 34,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1922,
+        "memoryUsedBytes": 232216,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 56,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 185976
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 279,
+            "1": 291,
+            "2": 305
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 292,
+            "1": 301,
+            "2": 317
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 292,
+            "1": 301,
+            "2": 317
+          }
+        },
+        "numInputRows": 35,
+        "inputRowsPerSecond": 1.166627779074031,
+        "processedRowsPerSecond": 1.6197704553868937,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:07:30.000Z",
+    "batchId": 8,
+    "batchDuration": 21288,
+    "numInputRows": 33,
+    "inputRowsPerSecond": 1.1000366678889297,
+    "processedRowsPerSecond": 1.5501691093573844,
+    "durationMs": {
+      "addBatch": 20232,
+      "commitOffsets": 541,
+      "getBatch": 0,
+      "latestOffset": 10,
+      "queryPlanning": 47,
+      "triggerExecution": 21287,
+      "walCommit": 452
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:07:12.272Z",
+      "max": "2026-11-14T15:07:28.000Z",
+      "min": "2026-11-14T15:06:56.000Z",
+      "watermark": "2026-11-14T15:01:57.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 830,
+        "numRowsUpdated": 33,
+        "allUpdatesTimeMs": 478,
+        "numRowsRemoved": 42,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1732,
+        "memoryUsedBytes": 234136,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 64,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 185112
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 292,
+            "1": 301,
+            "2": 317
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 304,
+            "1": 311,
+            "2": 328
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 304,
+            "1": 311,
+            "2": 328
+          }
+        },
+        "numInputRows": 33,
+        "inputRowsPerSecond": 1.1000366678889297,
+        "processedRowsPerSecond": 1.5501691093573844,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:08:00.001Z",
+    "batchId": 9,
+    "batchDuration": 20119,
+    "numInputRows": 31,
+    "inputRowsPerSecond": 1.0332988900369988,
+    "processedRowsPerSecond": 1.5408320493066257,
+    "durationMs": {
+      "addBatch": 19244,
+      "commitOffsets": 276,
+      "getBatch": 0,
+      "latestOffset": 33,
+      "queryPlanning": 31,
+      "triggerExecution": 20119,
+      "walCommit": 530
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:07:42.161Z",
+      "max": "2026-11-14T15:07:56.000Z",
+      "min": "2026-11-14T15:07:20.000Z",
+      "watermark": "2026-11-14T15:02:28.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 823,
+        "numRowsUpdated": 31,
+        "allUpdatesTimeMs": 424,
+        "numRowsRemoved": 38,
+        "allRemovalsTimeMs": 65,
+        "commitTimeMs": 1859,
+        "memoryUsedBytes": 232432,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 72,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 182088
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 304,
+            "1": 311,
+            "2": 328
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 313,
+            "1": 318,
+            "2": 343
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 313,
+            "1": 318,
+            "2": 343
+          }
+        },
+        "numInputRows": 31,
+        "inputRowsPerSecond": 1.0332988900369988,
+        "processedRowsPerSecond": 1.5408320493066257,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:08:30.001Z",
+    "batchId": 10,
+    "batchDuration": 21530,
+    "numInputRows": 45,
+    "inputRowsPerSecond": 1.5,
+    "processedRowsPerSecond": 2.0901068276823036,
+    "durationMs": {
+      "addBatch": 19987,
+      "commitOffsets": 690,
+      "getBatch": 1,
+      "latestOffset": 36,
+      "queryPlanning": 41,
+      "triggerExecution": 21530,
+      "walCommit": 760
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:08:11.133Z",
+      "max": "2026-11-14T15:08:28.000Z",
+      "min": "2026-11-14T15:07:58.000Z",
+      "watermark": "2026-11-14T15:02:56.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 841,
+        "numRowsUpdated": 45,
+        "allUpdatesTimeMs": 492,
+        "numRowsRemoved": 27,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1944,
+        "memoryUsedBytes": 231800,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 80,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 184464
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 313,
+            "1": 318,
+            "2": 343
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 333,
+            "1": 332,
+            "2": 354
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 333,
+            "1": 332,
+            "2": 354
+          }
+        },
+        "numInputRows": 45,
+        "inputRowsPerSecond": 1.5,
+        "processedRowsPerSecond": 2.0901068276823036,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:09:00.001Z",
+    "batchId": 11,
+    "batchDuration": 19663,
+    "numInputRows": 44,
+    "inputRowsPerSecond": 1.4666666666666666,
+    "processedRowsPerSecond": 2.2377053348929463,
+    "durationMs": {
+      "addBatch": 18302,
+      "commitOffsets": 624,
+      "getBatch": 0,
+      "latestOffset": 10,
+      "queryPlanning": 20,
+      "triggerExecution": 19662,
+      "walCommit": 698
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:08:40.477Z",
+      "max": "2026-11-14T15:08:57.000Z",
+      "min": "2026-11-14T15:08:17.000Z",
+      "watermark": "2026-11-14T15:03:28.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 844,
+        "numRowsUpdated": 44,
+        "allUpdatesTimeMs": 392,
+        "numRowsRemoved": 41,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1648,
+        "memoryUsedBytes": 235384,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 88,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 187056
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 333,
+            "1": 332,
+            "2": 354
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 351,
+            "1": 345,
+            "2": 367
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 351,
+            "1": 345,
+            "2": 367
+          }
+        },
+        "numInputRows": 44,
+        "inputRowsPerSecond": 1.4666666666666666,
+        "processedRowsPerSecond": 2.2377053348929463,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:09:30.000Z",
+    "batchId": 12,
+    "batchDuration": 21711,
+    "numInputRows": 48,
+    "inputRowsPerSecond": 1.6000533351111705,
+    "processedRowsPerSecond": 2.210860853945005,
+    "durationMs": {
+      "addBatch": 20728,
+      "commitOffsets": 484,
+      "getBatch": 0,
+      "latestOffset": 27,
+      "queryPlanning": 23,
+      "triggerExecution": 21711,
+      "walCommit": 445
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:09:09.354Z",
+      "max": "2026-11-14T15:09:27.000Z",
+      "min": "2026-11-14T15:08:50.000Z",
+      "watermark": "2026-11-14T15:03:57.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 860,
+        "numRowsUpdated": 48,
+        "allUpdatesTimeMs": 416,
+        "numRowsRemoved": 32,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1909,
+        "memoryUsedBytes": 237688,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 96,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 190728
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 351,
+            "1": 345,
+            "2": 367
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 370,
+            "1": 360,
+            "2": 381
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 370,
+            "1": 360,
+            "2": 381
+          }
+        },
+        "numInputRows": 48,
+        "inputRowsPerSecond": 1.6000533351111705,
+        "processedRowsPerSecond": 2.210860853945005,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:10:00.001Z",
+    "batchId": 13,
+    "batchDuration": 19774,
+    "numInputRows": 46,
+    "inputRowsPerSecond": 1.533282223925869,
+    "processedRowsPerSecond": 2.3262870435925964,
+    "durationMs": {
+      "addBatch": 18743,
+      "commitOffsets": 431,
+      "getBatch": 0,
+      "latestOffset": 32,
+      "queryPlanning": 26,
+      "triggerExecution": 19774,
+      "walCommit": 537
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:09:40.369Z",
+      "max": "2026-11-14T15:09:57.000Z",
+      "min": "2026-11-14T15:09:28.000Z",
+      "watermark": "2026-11-14T15:04:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 868,
+        "numRowsUpdated": 46,
+        "allUpdatesTimeMs": 536,
+        "numRowsRemoved": 38,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1797,
+        "memoryUsedBytes": 240568,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 104,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 186624
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 370,
+            "1": 360,
+            "2": 381
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 380,
+            "1": 376,
+            "2": 401
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 380,
+            "1": 376,
+            "2": 401
+          }
+        },
+        "numInputRows": 46,
+        "inputRowsPerSecond": 1.533282223925869,
+        "processedRowsPerSecond": 2.3262870435925964,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:10:30.000Z",
+    "batchId": 14,
+    "batchDuration": 25075,
+    "numInputRows": 52,
+    "inputRowsPerSecond": 1.7333911130371014,
+    "processedRowsPerSecond": 2.073778664007976,
+    "durationMs": {
+      "addBatch": 23795,
+      "commitOffsets": 570,
+      "getBatch": 1,
+      "latestOffset": 21,
+      "queryPlanning": 17,
+      "triggerExecution": 25075,
+      "walCommit": 665
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:10:11.788Z",
+      "max": "2026-11-14T15:10:27.000Z",
+      "min": "2026-11-14T15:09:55.000Z",
+      "watermark": "2026-11-14T15:04:57.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 880,
+        "numRowsUpdated": 52,
+        "allUpdatesTimeMs": 497,
+        "numRowsRemoved": 40,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1646,
+        "memoryUsedBytes": 240488,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 112,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 189648
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 380,
+            "1": 376,
+            "2": 401
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 398,
+            "1": 394,
+            "2": 417
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 398,
+            "1": 394,
+            "2": 417
+          }
+        },
+        "numInputRows": 52,
+        "inputRowsPerSecond": 1.7333911130371014,
+        "processedRowsPerSecond": 2.073778664007976,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:11:00.000Z",
+    "batchId": 15,
+    "batchDuration": 20166,
+    "numInputRows": 39,
+    "inputRowsPerSecond": 1.3,
+    "processedRowsPerSecond": 1.9339482296935435,
+    "durationMs": {
+      "addBatch": 19258,
+      "commitOffsets": 266,
+      "getBatch": 1,
+      "latestOffset": 14,
+      "queryPlanning": 46,
+      "triggerExecution": 20166,
+      "walCommit": 577
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:10:39.897Z",
+      "max": "2026-11-14T15:10:56.000Z",
+      "min": "2026-11-14T15:10:24.000Z",
+      "watermark": "2026-11-14T15:05:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 880,
+        "numRowsUpdated": 39,
+        "allUpdatesTimeMs": 621,
+        "numRowsRemoved": 39,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1849,
+        "memoryUsedBytes": 238912,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 120,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 188136
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 398,
+            "1": 394,
+            "2": 417
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 414,
+            "1": 405,
+            "2": 429
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 414,
+            "1": 405,
+            "2": 429
+          }
+        },
+        "numInputRows": 39,
+        "inputRowsPerSecond": 1.3,
+        "processedRowsPerSecond": 1.9339482296935435,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:11:30.000Z",
+    "batchId": 16,
+    "batchDuration": 21880,
+    "numInputRows": 37,
+    "inputRowsPerSecond": 1.2333333333333334,
+    "processedRowsPerSecond": 1.6910420475319927,
+    "durationMs": {
+      "addBatch": 20432,
+      "commitOffsets": 945,
+      "getBatch": 0,
+      "latestOffset": 11,
+      "queryPlanning": 24,
+      "triggerExecution": 21879,
+      "walCommit": 462
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:11:12.621Z",
+      "max": "2026-11-14T15:11:27.000Z",
+      "min": "2026-11-14T15:10:31.000Z",
+      "watermark": "2026-11-14T15:05:56.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 882,
+        "numRowsUpdated": 37,
+        "allUpdatesTimeMs": 492,
+        "numRowsRemoved": 35,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1656,
+        "memoryUsedBytes": 237832,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 128,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 187488
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 414,
+            "1": 405,
+            "2": 429
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 430,
+            "1": 420,
+            "2": 435
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 430,
+            "1": 420,
+            "2": 435
+          }
+        },
+        "numInputRows": 37,
+        "inputRowsPerSecond": 1.2333333333333334,
+        "processedRowsPerSecond": 1.6910420475319927,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:12:00.002Z",
+    "batchId": 17,
+    "batchDuration": 19486,
+    "numInputRows": 40,
+    "inputRowsPerSecond": 1.3332444503699754,
+    "processedRowsPerSecond": 2.0527558246946525,
+    "durationMs": {
+      "addBatch": 18321,
+      "commitOffsets": 527,
+      "getBatch": 0,
+      "latestOffset": 23,
+      "queryPlanning": 23,
+      "triggerExecution": 19486,
+      "walCommit": 584
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:11:40.825Z",
+      "max": "2026-11-14T15:11:58.000Z",
+      "min": "2026-11-14T15:11:21.000Z",
+      "watermark": "2026-11-14T15:06:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 892,
+        "numRowsUpdated": 40,
+        "allUpdatesTimeMs": 569,
+        "numRowsRemoved": 30,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1692,
+        "memoryUsedBytes": 236680,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 136,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 185976
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 430,
+            "1": 420,
+            "2": 435
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 443,
+            "1": 435,
+            "2": 447
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 443,
+            "1": 435,
+            "2": 447
+          }
+        },
+        "numInputRows": 40,
+        "inputRowsPerSecond": 1.3332444503699754,
+        "processedRowsPerSecond": 2.0527558246946525,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:12:30.000Z",
+    "batchId": 18,
+    "batchDuration": 21756,
+    "numInputRows": 38,
+    "inputRowsPerSecond": 1.266751116741116,
+    "processedRowsPerSecond": 1.746644603787461,
+    "durationMs": {
+      "addBatch": 20685,
+      "commitOffsets": 533,
+      "getBatch": 1,
+      "latestOffset": 17,
+      "queryPlanning": 27,
+      "triggerExecution": 21756,
+      "walCommit": 490
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:12:13.605Z",
+      "max": "2026-11-14T15:12:27.000Z",
+      "min": "2026-11-14T15:11:57.000Z",
+      "watermark": "2026-11-14T15:06:58.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 884,
+        "numRowsUpdated": 38,
+        "allUpdatesTimeMs": 447,
+        "numRowsRemoved": 46,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2234,
+        "memoryUsedBytes": 234456,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 144,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 180576
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 443,
+            "1": 435,
+            "2": 447
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 452,
+            "1": 452,
+            "2": 459
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 452,
+            "1": 452,
+            "2": 459
+          }
+        },
+        "numInputRows": 38,
+        "inputRowsPerSecond": 1.266751116741116,
+        "processedRowsPerSecond": 1.746644603787461,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:13:00.000Z",
+    "batchId": 19,
+    "batchDuration": 19952,
+    "numInputRows": 52,
+    "inputRowsPerSecond": 1.7333333333333334,
+    "processedRowsPerSecond": 2.606255012028869,
+    "durationMs": {
+      "addBatch": 19107,
+      "commitOffsets": 298,
+      "getBatch": 0,
+      "latestOffset": 17,
+      "queryPlanning": 16,
+      "triggerExecution": 19951,
+      "walCommit": 510
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:12:40.519Z",
+      "max": "2026-11-14T15:12:58.000Z",
+      "min": "2026-11-14T15:12:20.000Z",
+      "watermark": "2026-11-14T15:07:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 896,
+        "numRowsUpdated": 52,
+        "allUpdatesTimeMs": 523,
+        "numRowsRemoved": 40,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2166,
+        "memoryUsedBytes": 230264,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 152,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 180576
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 452,
+            "1": 452,
+            "2": 459
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 473,
+            "1": 468,
+            "2": 474
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 473,
+            "1": 468,
+            "2": 474
+          }
+        },
+        "numInputRows": 52,
+        "inputRowsPerSecond": 1.7333333333333334,
+        "processedRowsPerSecond": 2.606255012028869,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:13:30.000Z",
+    "batchId": 20,
+    "batchDuration": 21374,
+    "numInputRows": 39,
+    "inputRowsPerSecond": 1.3,
+    "processedRowsPerSecond": 1.8246467671002153,
+    "durationMs": {
+      "addBatch": 20281,
+      "commitOffsets": 467,
+      "getBatch": 0,
+      "latestOffset": 15,
+      "queryPlanning": 17,
+      "triggerExecution": 21374,
+      "walCommit": 592
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:13:13.230Z",
+      "max": "2026-11-14T15:13:28.000Z",
+      "min": "2026-11-14T15:12:58.000Z",
+      "watermark": "2026-11-14T15:07:58.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 872,
+        "numRowsUpdated": 39,
+        "allUpdatesTimeMs": 528,
+        "numRowsRemoved": 63,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1897,
+        "memoryUsedBytes": 231096,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 160,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 182520
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 473,
+            "1": 468,
+            "2": 474
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 482,
+            "1": 482,
+            "2": 490
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 482,
+            "1": 482,
+            "2": 490
+          }
+        },
+        "numInputRows": 39,
+        "inputRowsPerSecond": 1.3,
+        "processedRowsPerSecond": 1.8246467671002153,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:14:00.000Z",
+    "batchId": 21,
+    "batchDuration": 20075,
+    "numInputRows": 38,
+    "inputRowsPerSecond": 1.2666666666666666,
+    "processedRowsPerSecond": 1.8929016189290162,
+    "durationMs": {
+      "addBatch": 19316,
+      "commitOffsets": 229,
+      "getBatch": 0,
+      "latestOffset": 11,
+      "queryPlanning": 19,
+      "triggerExecution": 20075,
+      "walCommit": 496
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:13:43.000Z",
+      "max": "2026-11-14T15:13:58.000Z",
+      "min": "2026-11-14T15:13:28.000Z",
+      "watermark": "2026-11-14T15:08:28.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 859,
+        "numRowsUpdated": 38,
+        "allUpdatesTimeMs": 398,
+        "numRowsRemoved": 51,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2195,
+        "memoryUsedBytes": 230152,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 168,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 181440
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 482,
+            "1": 482,
+            "2": 490
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 491,
+            "1": 496,
+            "2": 505
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 491,
+            "1": 496,
+            "2": 505
+          }
+        },
+        "numInputRows": 38,
+        "inputRowsPerSecond": 1.2666666666666666,
+        "processedRowsPerSecond": 1.8929016189290162,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:14:30.000Z",
+    "batchId": 22,
+    "batchDuration": 20568,
+    "numInputRows": 46,
+    "inputRowsPerSecond": 1.5333333333333334,
+    "processedRowsPerSecond": 2.236483858420848,
+    "durationMs": {
+      "addBatch": 19257,
+      "commitOffsets": 677,
+      "getBatch": 0,
+      "latestOffset": 32,
+      "queryPlanning": 42,
+      "triggerExecution": 20568,
+      "walCommit": 555
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:14:11.630Z",
+      "max": "2026-11-14T15:14:27.000Z",
+      "min": "2026-11-14T15:13:55.000Z",
+      "watermark": "2026-11-14T15:08:58.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 856,
+        "numRowsUpdated": 46,
+        "allUpdatesTimeMs": 448,
+        "numRowsRemoved": 49,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2003,
+        "memoryUsedBytes": 240152,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 176,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 183440
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 491,
+            "1": 496,
+            "2": 505
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 499,
+            "1": 515,
+            "2": 524
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 499,
+            "1": 515,
+            "2": 524
+          }
+        },
+        "numInputRows": 46,
+        "inputRowsPerSecond": 1.5333333333333334,
+        "processedRowsPerSecond": 2.236483858420848,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:15:00.001Z",
+    "batchId": 23,
+    "batchDuration": 20136,
+    "numInputRows": 39,
+    "inputRowsPerSecond": 1.2999566681110628,
+    "processedRowsPerSecond": 1.9368295589988083,
+    "durationMs": {
+      "addBatch": 19343,
+      "commitOffsets": 206,
+      "getBatch": 0,
+      "latestOffset": 53,
+      "queryPlanning": 20,
+      "triggerExecution": 20136,
+      "walCommit": 510
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:14:42.717Z",
+      "max": "2026-11-14T15:14:58.000Z",
+      "min": "2026-11-14T15:14:27.000Z",
+      "watermark": "2026-11-14T15:09:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 859,
+        "numRowsUpdated": 39,
+        "allUpdatesTimeMs": 394,
+        "numRowsRemoved": 36,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1734,
+        "memoryUsedBytes": 232624,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 184,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 184032
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 499,
+            "1": 515,
+            "2": 524
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 510,
+            "1": 529,
+            "2": 538
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 510,
+            "1": 529,
+            "2": 538
+          }
+        },
+        "numInputRows": 39,
+        "inputRowsPerSecond": 1.2999566681110628,
+        "processedRowsPerSecond": 1.9368295589988083,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:15:30.002Z",
+    "batchId": 24,
+    "batchDuration": 20153,
+    "numInputRows": 39,
+    "inputRowsPerSecond": 1.2999566681110628,
+    "processedRowsPerSecond": 1.9351957524934253,
+    "durationMs": {
+      "addBatch": 18692,
+      "commitOffsets": 713,
+      "getBatch": 1,
+      "latestOffset": 26,
+      "queryPlanning": 39,
+      "triggerExecution": 20153,
+      "walCommit": 676
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:15:11.256Z",
+      "max": "2026-11-14T15:15:27.000Z",
+      "min": "2026-11-14T15:14:57.000Z",
+      "watermark": "2026-11-14T15:09:58.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 858,
+        "numRowsUpdated": 39,
+        "allUpdatesTimeMs": 446,
+        "numRowsRemoved": 40,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1987,
+        "memoryUsedBytes": 231184,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 192,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 180360
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 510,
+            "1": 529,
+            "2": 538
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 520,
+            "1": 544,
+            "2": 552
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 520,
+            "1": 544,
+            "2": 552
+          }
+        },
+        "numInputRows": 39,
+        "inputRowsPerSecond": 1.2999566681110628,
+        "processedRowsPerSecond": 1.9351957524934253,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:16:00.000Z",
+    "batchId": 25,
+    "batchDuration": 22806,
+    "numInputRows": 43,
+    "inputRowsPerSecond": 1.4334288952596839,
+    "processedRowsPerSecond": 1.8854687362974656,
+    "durationMs": {
+      "addBatch": 21864,
+      "commitOffsets": 200,
+      "getBatch": 0,
+      "latestOffset": 18,
+      "queryPlanning": 49,
+      "triggerExecution": 22806,
+      "walCommit": 668
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:15:41.418Z",
+      "max": "2026-11-14T15:15:57.000Z",
+      "min": "2026-11-14T15:15:27.000Z",
+      "watermark": "2026-11-14T15:10:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 860,
+        "numRowsUpdated": 43,
+        "allUpdatesTimeMs": 450,
+        "numRowsRemoved": 41,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2139,
+        "memoryUsedBytes": 231352,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 200,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 181440
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 520,
+            "1": 544,
+            "2": 552
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 537,
+            "1": 557,
+            "2": 565
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 537,
+            "1": 557,
+            "2": 565
+          }
+        },
+        "numInputRows": 43,
+        "inputRowsPerSecond": 1.4334288952596839,
+        "processedRowsPerSecond": 1.8854687362974656,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:16:30.001Z",
+    "batchId": 26,
+    "batchDuration": 20556,
+    "numInputRows": 43,
+    "inputRowsPerSecond": 1.433285557148095,
+    "processedRowsPerSecond": 2.091846662774859,
+    "durationMs": {
+      "addBatch": 18861,
+      "commitOffsets": 1141,
+      "getBatch": 0,
+      "latestOffset": 28,
+      "queryPlanning": 17,
+      "triggerExecution": 20556,
+      "walCommit": 507
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:16:13.441Z",
+      "max": "2026-11-14T15:16:27.000Z",
+      "min": "2026-11-14T15:15:56.000Z",
+      "watermark": "2026-11-14T15:10:57.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 861,
+        "numRowsUpdated": 43,
+        "allUpdatesTimeMs": 447,
+        "numRowsRemoved": 42,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1667,
+        "memoryUsedBytes": 230136,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 208,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 179928
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 537,
+            "1": 557,
+            "2": 565
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 555,
+            "1": 569,
+            "2": 578
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 555,
+            "1": 569,
+            "2": 578
+          }
+        },
+        "numInputRows": 43,
+        "inputRowsPerSecond": 1.433285557148095,
+        "processedRowsPerSecond": 2.091846662774859,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:17:00.002Z",
+    "batchId": 27,
+    "batchDuration": 19844,
+    "numInputRows": 39,
+    "inputRowsPerSecond": 1.2999566681110628,
+    "processedRowsPerSecond": 1.9653295706510783,
+    "durationMs": {
+      "addBatch": 18694,
+      "commitOffsets": 519,
+      "getBatch": 0,
+      "latestOffset": 16,
+      "queryPlanning": 13,
+      "triggerExecution": 19844,
+      "walCommit": 599
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:16:41.794Z",
+      "max": "2026-11-14T15:16:57.000Z",
+      "min": "2026-11-14T15:16:26.000Z",
+      "watermark": "2026-11-14T15:11:27.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 866,
+        "numRowsUpdated": 39,
+        "allUpdatesTimeMs": 420,
+        "numRowsRemoved": 34,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 1926,
+        "memoryUsedBytes": 226640,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 216,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 177768
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 555,
+            "1": 569,
+            "2": 578
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 568,
+            "1": 582,
+            "2": 591
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 568,
+            "1": 582,
+            "2": 591
+          }
+        },
+        "numInputRows": 39,
+        "inputRowsPerSecond": 1.2999566681110628,
+        "processedRowsPerSecond": 1.9653295706510783,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  },
+  {
+    "id": "800b68d5-f2f5-4533-b13e-8978e24e6804",
+    "runId": "eaa45f67-4b6f-43d2-b594-1e0e35c4fac8",
+    "name": null,
+    "timestamp": "2026-11-14T15:17:30.001Z",
+    "batchId": 28,
+    "batchDuration": 20342,
+    "numInputRows": 35,
+    "inputRowsPerSecond": 1.1667055568518951,
+    "processedRowsPerSecond": 1.720578114246387,
+    "durationMs": {
+      "addBatch": 19239,
+      "commitOffsets": 564,
+      "getBatch": 0,
+      "latestOffset": 17,
+      "queryPlanning": 20,
+      "triggerExecution": 20341,
+      "walCommit": 499
+    },
+    "eventTime": {
+      "avg": "2026-11-14T15:17:10.971Z",
+      "max": "2026-11-14T15:17:27.000Z",
+      "min": "2026-11-14T15:16:56.000Z",
+      "watermark": "2026-11-14T15:11:57.000Z"
+    },
+    "stateOperators": [
+      {
+        "operatorName": "dedupeWithinWatermark",
+        "numRowsTotal": 863,
+        "numRowsUpdated": 35,
+        "allUpdatesTimeMs": 371,
+        "numRowsRemoved": 38,
+        "allRemovalsTimeMs": 0,
+        "commitTimeMs": 2209,
+        "memoryUsedBytes": 232472,
+        "numRowsDroppedByWatermark": 0,
+        "numShufflePartitions": 8,
+        "numStateStoreInstances": 8,
+        "customMetrics": {
+          "loadedMapCacheHitCount": 224,
+          "loadedMapCacheMissCount": 0,
+          "numDroppedDuplicateRows": 0,
+          "stateOnCurrentVersionSizeBytes": 177608
+        }
+      }
+    ],
+    "sources": [
+      {
+        "description": "KafkaV2[Subscribe[wikimedia.recentchange]]",
+        "startOffset": {
+          "wikimedia.recentchange": {
+            "0": 568,
+            "1": 582,
+            "2": 591
+          }
+        },
+        "endOffset": {
+          "wikimedia.recentchange": {
+            "0": 584,
+            "1": 590,
+            "2": 602
+          }
+        },
+        "latestOffset": {
+          "wikimedia.recentchange": {
+            "0": 584,
+            "1": 590,
+            "2": 602
+          }
+        },
+        "numInputRows": 35,
+        "inputRowsPerSecond": 1.1667055568518951,
+        "processedRowsPerSecond": 1.720578114246387,
+        "metrics": {
+          "avgOffsetsBehindLatest": "0.0",
+          "maxOffsetsBehindLatest": "0",
+          "minOffsetsBehindLatest": "0"
+        }
+      }
+    ],
+    "sink": {
+      "description": "ForeachBatchSink",
+      "numOutputRows": -1
+    }
+  }
+]

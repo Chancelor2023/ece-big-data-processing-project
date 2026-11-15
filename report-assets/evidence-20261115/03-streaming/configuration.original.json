@@ -1,0 +1,7 @@
+{
+  "topic": "wikimedia.recentchange",
+  "brokers": "kafka:19092",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "watermark": "5 minutes",
+  "matching": "exact enwiki sitelink -> Wikidata P345 -> cleaned IMDb ID"
+}

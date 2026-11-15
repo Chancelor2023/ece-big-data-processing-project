@@ -10,7 +10,7 @@ from pyspark import StorageLevel
 from pyspark.sql import functions as F
 
 from imdb_pipeline.config import ENRICHMENT_DIR, RESULTS_DIR
-from imdb_pipeline.enrichment import RAW_SCHEMA, clean_collected
+from imdb_pipeline.enrichment import clean_collected, read_collected
 from imdb_pipeline.spark import create_spark
 from jobs.preparation.prepare_titles import atomic_json
 
@@ -29,7 +29,7 @@ def main():
     output = root / "clean" / snapshot
     spark = create_spark("prepare-wikipedia-enrichment")
     try:
-        raw = spark.read.schema(RAW_SCHEMA).json(str(root / "raw"))
+        raw = read_collected(spark, root / "raw")
         if raw.groupBy("imdb_id").count().filter("count > 1").limit(1).count():
             raise ValueError("Duplicate collected identifiers")
         content = clean_collected(raw).persist(StorageLevel.DISK_ONLY)
