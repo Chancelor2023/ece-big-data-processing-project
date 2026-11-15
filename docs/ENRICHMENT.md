@@ -41,6 +41,22 @@ docker compose exec -T spark python -m jobs.enrichment.prepare_wikipedia
 
 Use `--run-id YYYYMMDDTHHMMSSZ` with either collection/preparation command to target a specific earlier run. Collection is serial and may take several hours on the full scope. Each record is saved as it completes. Rerunning collection reuses recorded successes and missing/ambiguous matches; failed API requests are retried. `--refresh` re-fetches records and bypasses the HTTP cache. Do not run simultaneous collectors against the same cache/run.
 
+On resume, `restoring_cache` means saved records are being reused, without rewriting existing nonempty raw files. Progress is printed and saved after every batch, including batches entirely served from cache. In `results/enrichment/<run_id>/collection_full.json`, `processed` includes reused records, `counts` describes the current attempt and `overall_status_counts` includes the underlying statuses of reused records. The previous attempt's summary is archived in `collection_history/`. `completed` means the request list has been traversed; check API errors and content coverage separately.
+
+An interrupt records `interrupted` when the process can handle it. Resume with the same scope and run ID after restarting Docker. File writes use unique temporary files and retry transient missing-path/permission errors; preparation reads only completed `*.json` records. Sleeping the computer still suspends network access and is not a background execution option.
+
+### View progress on Windows
+
+Double-click `scripts/Ouvrir-Suivi-Collecte.cmd`, or run the following from a second PowerShell window in the project directory:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Watch-Enrichment.ps1
+```
+
+The display refreshes every ten seconds. Add `-Once` for a single snapshot, or `-RunId 20261114T142005Z` to pin an existing run instead of following the current selection at launch. The viewer only reads `results/enrichment/<run_id>/collection_full.json`; it does not launch, stop or modify collection. Closing the viewer has no effect on the collector.
+
+The underlying report is updated by batches of fifty, so unchanged counters between refreshes are expected. The viewer shows the last checkpoint's age and warns after five minutes without a recent checkpoint; a report declaring `running` alone cannot establish whether the process is still alive. Collected HTML counts are separate from final Spark-cleaned text coverage.
+
 Requests use an identifying User-Agent, a minimum one-second interval, bounded retries, `Retry-After` delays and MediaWiki `maxlag=5`. HTTP responses are cached for 24 hours; per-entity snapshots persist until explicitly refreshed. Set `WIKIMEDIA_USER_AGENT` for a different identifying contact string. These behaviors follow [MediaWiki API etiquette](https://www.mediawiki.org/wiki/API:Etiquette) and [maxlag guidance](https://www.mediawiki.org/wiki/Manual:Maxlag_parameter). They remain subject to server-imposed throttling.
 
 ## Matching, text and lineage

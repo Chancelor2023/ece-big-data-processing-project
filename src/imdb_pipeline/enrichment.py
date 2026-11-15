@@ -109,6 +109,11 @@ RAW_SCHEMA = T.StructType([
 ])
 
 
+def read_collected(spark, directory):
+    """Only committed JSON records are inputs; interrupted writes are excluded."""
+    return spark.read.schema(RAW_SCHEMA).option("pathGlobFilter", "*.json").json(str(directory))
+
+
 def clean_collected(raw):
     # All text cleaning, casts and output-schema construction run in Spark.
     extract = F.udf(article_text, "struct<text:string,status:string>")
