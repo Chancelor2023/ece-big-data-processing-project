@@ -1,0 +1,11 @@
+kind,status,count,denominator
+film,no_english_article,332,7263
+film,available,5983,7263
+film,missing_plot_section,378,7263
+film,ambiguous_match,6,7263
+film,not_found,564,7263
+person,no_english_article,1200,11443
+person,available,8055,11443
+person,missing_biography_intro,1,11443
+person,not_found,2173,11443
+person,ambiguous_match,14,11443
