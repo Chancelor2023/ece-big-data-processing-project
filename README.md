@@ -73,4 +73,23 @@ Raw archives, article bodies, Parquet, caches, credentials and checkpoints are e
 
 Use one feature branch per task and obtain a peer review and formal approval before merging its PR. No direct commits to main. Comments such as “All good” and a merge action are not formal GitHub approvals. Historical review-trace gaps remain to be clarified; do not describe later reviews as having preceded a merge.
 
-Write the explanations and reasoning in REPORT.md personally. Verify final outputs and repository links after integrating the corrected exploration and open question. Submit the repository according to the course README once the report and integrated reproduction are ready.
+## Changing parameters
+
+class Params:
+    min_runtime: int = 40
+    z_threshold: float = 2.0
+    min_genre_size: int = 30
+    min_votes: int = 1000
+    year_from: int = 1980
+    year_to: int = 2025
+    top_n: int = 3
+
+## Running the exploration
+
+```bash
+docker compose exec -T spark python -m jobs.exploration.run
+docker compose exec -T spark python -m unittest tests.test_exploration -v
+```
+
+## Q3 zero-vote case
+The share is `null` only when the annual total used as the denominator is zero. A group with zero votes and a positive annual total has a share of `0`.
