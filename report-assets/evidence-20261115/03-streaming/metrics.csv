@@ -1,0 +1,17 @@
+metric,value
+status,stopped
+session_id,20261114T150245Z
+run_id,live-validation-20261114-v2
+synthetic,False
+imdb_keys,28779116
+started_at_utc,2026-11-14T15:03:08.022260+00:00
+elapsed_seconds,900.63
+committed_batches,29
+processed_rows,1776
+matched_events,203
+matched_events_in_live_window,130
+live_test_passed,True
+watermark,5 minutes
+observed_rows_dropped_by_watermark,0
+observed_duplicates_dropped,0
+progress_input_rows,1776

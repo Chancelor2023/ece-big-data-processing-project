@@ -1,0 +1,10 @@
+{
+  "snapshot": "20261115T105744Z-c082eb",
+  "path": "clean/20261115T105744Z-c082eb",
+  "coverage": "/workspace/results/enrichment/20261114T142005Z/synopsis_recoveries/20261115T105744Z-c082eb/coverage.json",
+  "stage": "synopsis_recovery",
+  "base_snapshot": "20261115T103509Z-ceaeb1",
+  "film_people_path": "clean/20261115T103509Z-ceaeb1/film_people",
+  "supplemental_film_people_path": "clean/20261115T103509Z-ceaeb1/supplemental_film_people",
+  "synopsis_extraction_version": "conservative-h2-v2"
+}

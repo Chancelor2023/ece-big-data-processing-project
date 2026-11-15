@@ -1,0 +1,141 @@
+{
+  "run_id": "20261114T142005Z",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "selection": "titleType=movie; 1980<=startYear<=2025; numVotes>0; known genre",
+  "ranking": "numVotes DESC, averageRating DESC NULLS LAST, tconst ASC",
+  "per_genre_year": 10,
+  "principals_per_film": 3,
+  "people_order": "minimum IMDb ordering per distinct person, then nconst",
+  "film_genre_year_rows": 10277,
+  "unique_films": 7263,
+  "film_person_links": 22611,
+  "unique_people": 11443,
+  "films_with_fewer_than_three_people": 53,
+  "pilot_films": 3,
+  "pilot_requests": 12,
+  "full_enrichment_complete": false,
+  "content_snapshot": "20261115T105744Z-c082eb",
+  "coverage": [
+    {
+      "kind": "film",
+      "status": "no_english_article",
+      "count": 332
+    },
+    {
+      "kind": "film",
+      "status": "available",
+      "count": 5983
+    },
+    {
+      "kind": "film",
+      "status": "missing_plot_section",
+      "count": 378
+    },
+    {
+      "kind": "film",
+      "status": "ambiguous_match",
+      "count": 6
+    },
+    {
+      "kind": "film",
+      "status": "not_found",
+      "count": 564
+    },
+    {
+      "kind": "person",
+      "status": "no_english_article",
+      "count": 1200
+    },
+    {
+      "kind": "person",
+      "status": "available",
+      "count": 8055
+    },
+    {
+      "kind": "person",
+      "status": "missing_biography_intro",
+      "count": 1
+    },
+    {
+      "kind": "person",
+      "status": "not_found",
+      "count": 2173
+    },
+    {
+      "kind": "person",
+      "status": "ambiguous_match",
+      "count": 14
+    }
+  ],
+  "films_with_three_available_biographies": 5825,
+  "collection_attempted_for_all_targets": true,
+  "stage": "synopsis_recovery",
+  "base_content_snapshot": "20261115T092501Z-6b1e0b",
+  "selection_film_person_links": 21695,
+  "supplemental_film_person_links": 916,
+  "films_with_supplemental_links": 791,
+  "films_with_synopsis_and_three_available_biographies": 5329,
+  "additional_films_with_three_biographies": 579,
+  "additional_films_with_synopsis_and_three_biographies": 403,
+  "supplement_validation": {
+    "baseline_coverage_recomputed": true,
+    "additions_unique": true,
+    "additions_not_original": true,
+    "available_biography_provenance": true,
+    "original_links_preserved": true,
+    "merged_links_unique": true,
+    "no_biography_regression": true,
+    "at_most_three_available_biographies": true,
+    "matches_prior_audit_additions": true,
+    "matches_prior_audit_three": true,
+    "matches_prior_audit_both": true,
+    "films_unchanged_on_readback": true,
+    "people_and_biographies_unchanged_on_readback": true,
+    "coverage_recomputed_from_published_links": true,
+    "published_film_count": true,
+    "selection_summary_unchanged": true,
+    "source_catalog_unchanged": true,
+    "base_publication_not_changed_concurrently": true
+  },
+  "selection_summary_sha256": "b9f0d0fe17517e29095471d5826da39ca27b607ce9ab52507cda6d14de6ef35a",
+  "text_collection_unchanged": true,
+  "synopsis_base_snapshot": "20261115T103509Z-ceaeb1",
+  "synopsis_extraction_version": "conservative-h2-v2",
+  "synopsis_targets_examined": 480,
+  "additional_synopses": 102,
+  "available_synopses": 5983,
+  "additional_films_with_both_from_synopsis_recovery": 47,
+  "recovery_decisions": [
+    {
+      "status": "available",
+      "count": 102
+    },
+    {
+      "status": "redirect_requires_review",
+      "count": 15
+    },
+    {
+      "status": "missing_plot_section",
+      "count": 363
+    }
+  ],
+  "synopsis_validation": {
+    "cached_records_match_targets": true,
+    "recovery_keys_unique": true,
+    "recovery_same_revision_as_base": true,
+    "recovery_text_and_provenance": true,
+    "film_keys_and_count_preserved": true,
+    "existing_available_synopses_unchanged": true,
+    "nonrecovered_films_unchanged": true,
+    "all_film_metadata_and_lineage_unchanged": true,
+    "synopsis_gain_matches_accepted_recoveries": true,
+    "published_films_match": true,
+    "people_and_biographies_unchanged": true,
+    "biography_coverage_unchanged": true,
+    "effective_links_unchanged": true,
+    "selection_summary_unchanged": true,
+    "base_publication_not_changed_concurrently": true
+  },
+  "raw_collection_unchanged": true,
+  "biographies_unchanged": true
+}
