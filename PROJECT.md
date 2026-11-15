@@ -13,19 +13,22 @@ Class group: Ing5 Gr3. Complete the actual email addresses before submission.
 
 The project provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab and persistent local data. All seven IMDb tables have download, profiling, cleaning, quarantine and publication jobs. Film/person enrichment and live Wikipedia ingestion are implemented.
 
-Status checked on 14 November 2026:
+Delivery status checked on 15 November 2026 (Europe/Paris):
 
 | Component | Delivery and remaining work |
 | --- | --- |
 | Environment and seven-table preparation | Merged into `main` through PRs #1–#3; full-source execution validated |
 | Wikipedia → Kafka → Spark | PR #4 merged; a real 15-minute session was validated |
-| Film/person enrichment | PR #6 merged; pilot validated, full collection still running; final Spark coverage pending |
-| Collection resume and Windows progress viewer | PR #8 open, commit `129a97a`; nine tests and a real resume validated; peer review required |
-| Exploration Q1–Q3 | PR #5 open; six tests and full-data execution passed; documentation/review pending |
-| Exploration Q4–Q8 | PR #7 open; reviewed version required corrections; newer commit `0e63ba7` awaits re-review |
-| Open question and clean-clone verification | Pending delivery/validation |
+| Film/person enrichment | PR #6 merged; full collection completed, final Spark preparation and coverage checks passed |
+| Collection resume and Windows progress viewer | PR #8 merged, including the execution guide from #9 |
+| Cached biographies and synopsis recovery | PRs #10 and #11 merged; 916 supplementary associations and 102 recovered synopses |
+| Versioned evidence and integrity | #12 included through #11; #13 merged; published hashes and a fresh-clone evidence check passed |
+| Exploration Q1–Q3 | PR #5 open, `69da2b4`; six tests and full-data execution passed; documentation and approval pending |
+| Exploration Q4–Q8 | PR #7 open, `beebb2d`; Q5/Q6 corrections and final validation pending; two Q6 tests fail and the announced regression module is absent |
+| Open question and integrated clean-clone run | No delivered open-question implementation; complete end-to-end reproduction pending |
+| Report and contributor contacts | REPORT.md still needs the group’s results and own reasoning; actual email addresses remain to be completed |
 
-These are delivery statuses, not a claim that the final report or full enrichment coverage is complete. Commands for a component require its code in the checked-out branch. The current resume feature branch does not contain the streaming or exploration modules; streaming is available on `main`, and exploration remains in its PRs. Use the integrated, reviewed version for the final clean-clone run. Do not switch or replace the mounted checkout while a job is running.
+Preparation, enrichment, streaming and evidence are integrated in `main`; exploration remains in PRs #5/#7. Commands for an unmerged component require its branch. The completed collection does not imply complete text coverage. The fresh-clone check validated evidence integrity only, not all processing stages. Run the full end-to-end check after the remaining components are integrated. Do not switch or replace the mounted checkout while a job is running.
 
 Spark runs in `local[2]` mode inside one container, as in a local lab. This is not a multi-node Spark cluster. Kafka uses one KRaft broker/controller with persistent storage and no ZooKeeper.
 
@@ -202,14 +205,14 @@ To continue that same selection on the full scope:
 docker compose exec -T spark python -m jobs.enrichment.collect_wikipedia --scope full
 ```
 
-Do not rerun `select_targets` to resume collection: it creates a new run. Jerry's active selection is `20261114T142005Z`, containing 7,263 films and 11,443 unique people (18,706 requests). To resume this exact existing run after a controlled interruption:
+Do not rerun `select_targets` to resume collection: it creates a new run. Jerry’s completed selection is `20261114T142005Z`, containing 7,263 films and 11,443 unique people (18,706 requests). Its full collection is finished and does not need restarting. The following commands illustrate resuming that run after an interruption; use your own run ID for a new reproduction:
 
 ```bash
 docker compose up -d
 docker compose exec -T spark python -m jobs.enrichment.collect_wikipedia --scope full --run-id 20261114T142005Z
 ```
 
-Use only one collector per run/cache. Saved successes and missing/ambiguous matches are reused; API failures are retried. `--refresh` deliberately bypasses that reuse and is not a normal resume option. The resume improvements and viewer require PR #8's code until it is merged.
+Use only one collector per run/cache. Saved successes and missing/ambiguous matches are reused; API failures are retried. `--refresh` deliberately bypasses that reuse and is not a normal resume option. The resume improvements and viewer are included in `main` through #8.
 
 ### View collection progress on Windows
 
@@ -247,9 +250,58 @@ docker compose exec -T spark python -m jobs.enrichment.audit_principal_shortfall
 
 Supplemental credit proposals are separate from the active collection and do not prove that three biographies are available. Preserve and report these limitations explicitly.
 
+### Apply the cached-text improvements
+
+Run after the full collection and its base `prepare_wikipedia` publication, in this order. Omit `--run-id` to use the current selection in your own reproduction:
+
+```bash
+docker compose exec -T spark python -m unittest tests.test_cached_biography_supplements tests.test_enrichment tests.test_synopsis_recovery -v
+docker compose exec -T spark python -m jobs.enrichment.supplement_cached_biographies
+docker compose exec -T spark python -m jobs.enrichment.recover_synopses
+```
+
+For an explicitly chosen existing run, both jobs accept `--run-id 20261114T142005Z`. They reuse cached text without HTTP requests. The original selection and existing text are preserved; effective associations include the cached-biography supplements. Rerunning an already applied improvement returns `already_published` without creating another snapshot. Running base `prepare_wikipedia` again creates an unsupplemented publication, so apply the two improvements afterward if that is intended.
+
+Read [cached biographies](docs/CACHED_BIOGRAPHIES.md) and [synopsis recovery](docs/SYNOPSIS_RECOVERY.md) for output paths, guards and provenance. Downstream readers must use `current_content.json`'s `film_people_path` when present, with the initial selection as fallback. The synopsis snapshot retains associations from the supplement snapshot.
+
+Measured coverage for completed selection `20261114T142005Z`, final content snapshot `20261115T105744Z-c082eb`:
+
+| Metric | Observed result |
+| --- | --- |
+| Films / unique people targeted | 7,263 / 11,443 |
+| Available synopses | 5,983 / 7,263 (82.38%) |
+| Available unique biographies | 8,055 / 11,443 (70.39%) |
+| Films with at least three biographies | 5,825 / 7,263 (80.20%) |
+| Films with synopsis and at least three biographies | 5,329 / 7,263 (73.37%) |
+| Supplementary associations / recovered synopses | 916 / 102 |
+
+These are historical measurements, not guaranteed counts for a later IMDb/Wikipedia snapshot. Missing text and insufficient-person cases remain explicit. See [coverage progression](report-assets/evidence-20261115/02-enrichment/coverage_progression.csv), [status counts](report-assets/evidence-20261115/02-enrichment/status_counts.csv) and [remaining cases](report-assets/evidence-20261115/INDEX.md). Reusing a biography increases associations, not the number of unique biography texts.
+
+## Evidence and integrity verification
+
+Start with the [evidence index](report-assets/evidence-20261115/INDEX.md). It links all seven table counts, 78 column profiles, enrichment coverage and missing cases, streaming metrics and source metadata. [SOURCES.csv](report-assets/evidence-20261115/SOURCES.csv) records original files and URLs; [MANIFEST.json](report-assets/evidence-20261115/MANIFEST.json) and [SHA256SUMS.txt](report-assets/evidence-20261115/SHA256SUMS.txt) record exact bytes.
+
+Verify the versioned bundle without Spark, collection or network access:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.verify_evidence
+```
+
+With host-side Python available, `python -m jobs.reporting.verify_evidence` also works from the repository root. Expected results for this bundle: `status: passed`, 64 manifest entries, 63 checksum entries, 48 source copies and 18 CSVs. These checks passed on the published fix commit `ca83520` and a fresh clone; after #13 merged into `main` (`1ff95ba`), the evidence subtree, Git attributes and verifier were confirmed identical to that commit. This is an evidence-integrity check, not the complete clean-clone execution of all processing stages.
+
+Git preserves exact evidence bytes with `report-assets/** -text`. Keep original CRLF or LF record terminators as recorded by the hashes. Raw archives, article bodies, Parquet datasets, caches, credentials and checkpoints remain excluded; selected factual report assets are deliberately versioned.
+
+To create a new evidence snapshot from existing validated local outputs:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.prepare_evidence --output report-assets/NEW-EVIDENCE-DIRECTORY
+```
+
+Choose a new destination; the exporter refuses to overwrite an existing bundle. See [the evidence guide](docs/EVIDENCE_PACKAGE.md). Keep the existing historical bundle unchanged when reproducing results on newer sources.
+
 ## Live Wikipedia → Kafka → Spark
 
-This component is merged on `main`; use a checkout containing its modules. See [the streaming execution guide](https://github.com/Chancelor2023/ece-big-data-processing-project/blob/main/docs/STREAMING.md) for outputs, matching, checkpoints and late-data behavior.
+This component is merged on `main`. See [the streaming execution guide](docs/STREAMING.md) for outputs, matching, checkpoints and late-data behavior.
 
 After table preparation and service startup:
 
@@ -277,7 +329,7 @@ The validated session `live-validation-20261114-v2` / `20261114T150245Z` lasted 
 
 ## Exploration and open question
 
-Exploration code is not yet merged. PR #5 implements Q1–Q3; its revised version passed six tests and full-data execution. PR #7 implements Q4–Q8; the previous version had execution and data-definition defects, and its latest update requires re-review. Follow their reviewed, completed instructions after integration; do not treat their outputs as approved before that review.
+Exploration code is not yet merged. [PR #5](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/5), `69da2b4`, implements Q1–Q3; six tests and full-data execution passed, with documentation and approval pending. [PR #7](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/7), `beebb2d`, implements Q4–Q8; season-zero handling in Q5 and the original-language source in Q6 remain to be corrected. Its two revised Q6 tests fail against the published implementation, and the announced `tests.test_q5_q6_regression` module is absent. These are the last reviewed versions, not a successful final Q4–Q8 run.
 
 On a checkout containing the exploration modules, the provided entry points are:
 
@@ -287,14 +339,18 @@ docker compose exec -T spark python -m unittest tests.test_exploration_q4_q8 -v
 docker compose exec -T spark python -m jobs.exploration.run
 ```
 
-These commands identify the PR interfaces; successful Q4–Q8 execution is still to be validated. The open question is assigned to Brett and has no validated entry point yet. Its final command and outputs must be added before submission.
+These commands identify the PR interfaces; use them only on a checkout containing those modules. Successful corrected Q4–Q8 execution on the full cleaned catalog is still to be validated.
+
+The agreed Q6 input contract is one distinct `(tconst, language)` pair per row, with Wikidata language IDs from P364, exact IMDb P345 matching, provenance and explicit missing/ambiguous coverage. A multilingual film contributes all its declared languages. No alternative-title language fallback is accepted. Collection must cover all Q6-eligible films, not just the enrichment top-ten selection. The corrected code must produce lists for at least two and at least three languages. No arbitrary numerical coverage threshold was proposed; a final Q6 validation still requires completed collection, successful controls, results and coverage, and cannot treat zero coverage as an answered question. An explicit `pending` Q6 mode may validate the other questions separately, not the entire Q4–Q8 delivery. Implementation and final commands remain Brett’s pending work; no P364 collector command is supplied here before it exists.
+
+The open question is assigned to Brett and has no delivered implementation or validated entry point yet. Its final command and outputs must be added before submission.
 
 ## Final reproduction and collaboration
 
-- Follow environment startup, both table-preparation stages, enrichment selection/pilot/full collection/final preparation, then exploration, the live-streaming test and the open question. Stop each Spark application before starting another.
-- Brett performs the final clean-clone check once the reviewed components are integrated. Verify actual output paths, run IDs, source fingerprints and coverage. This check has not yet been completed.
+- Follow environment startup, both table-preparation stages, enrichment selection/pilot/full collection/base preparation, cached-biography supplementation, synopsis recovery, then the integrated exploration, live-streaming test and open question. Stop each Spark application before starting another.
+- Brett performs the complete clean-clone check once the remaining components are corrected and integrated. Run `docker compose exec -T spark python -m unittest discover -s tests -v`, then the documented processing stages. Preserve the tested commit, actual commands, exit codes, output paths, run IDs, source fingerprints and coverage. The evidence-only clone check is complete; the integrated processing check remains pending.
 - Each task uses a feature branch and a PR approved by the other group member before merging. Keep `main` and active PR branches; after a PR is merged and its changes verified on `main`, its remote feature branch can be deleted while retaining commits and PR history. Do not delete branches with active work or open PRs.
-- `REPORT.md` results and methodological reasoning remain the members' own work. Complete actual contributor emails and outstanding deliverables before submission.
+- `REPORT.md` results and methodological reasoning remain the members’ own work. Complete actual contributor emails, report sections, exploration outputs and the open question before submission. Use repository-relative links to versioned evidence in the report; local ignored data/results paths are not accessible to the grader. Follow the course README for the submission email once the project is ready.
 
 ## Stop and restart
 
