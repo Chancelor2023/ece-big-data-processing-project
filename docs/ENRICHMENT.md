@@ -65,7 +65,7 @@ Wikidata's query service resolves the exact IMDb identifier through property `P3
 
 The collector stores the API's original JSON/HTML, lookup URL, entity URI, article URL, request URL and retrieval timestamp. It performs HTTP routing and checkpointing, without cleaning article text. The Spark job enforces the raw schema, runs an HTML parser as a Spark UDF, and joins the results to the full target set.
 
-Film synopses contain the paragraphs of a `Plot`, `Synopsis`, `Plot synopsis`, `Plot summary` or `Story` section, including its subsections. A general film introduction is not substituted when that section is missing. Person biographies contain the article's introductory paragraphs before the first level-two heading. Infobox tables, scripts, superscript references and edit controls are excluded during Spark processing. Text is copied and normalized, not rewritten or summarized by an LLM.
+Film synopses contain the paragraphs of a `Plot`, `Synopsis`, `Plot synopsis`, `Plot summary`, `Story`, `Summary`, `Premise` or `Storyline` level-two section, including its subsections. Multiple nonempty recognized sections require review. A general film introduction is not substituted when that section is missing. Person biographies contain the article's introductory paragraphs before the first level-two heading. Infobox tables, scripts, superscript references and edit controls are excluded during Spark processing. Text is copied and normalized, not rewritten or summarized by an LLM.
 
 Each collected text retains the Wikipedia page ID, revision ID, revision permalink (`source_url`), retrieval timestamp, Wikidata URI and [Wikipedia's CC BY-SA 4.0 attribution link](https://creativecommons.org/licenses/by-sa/4.0/). Retain this lineage when using or exporting text.
 
@@ -79,7 +79,7 @@ The current clean snapshot contains:
 | `people` | `nconst` | `biography`, status and lineage |
 | `film_biography_coverage` | `tconst` | Count of distinct selected people with available biographies |
 
-Statuses include `available`, `pending`, `not_found`, `ambiguous_match`, `no_english_article`, `missing_plot_section`, `missing_biography_intro`, `api_error` and `missing_article_html`. Missing records keep their programmatic status; text is never fabricated.
+Statuses include `available`, `pending`, `not_found`, `ambiguous_match`, `no_english_article`, `missing_plot_section`, `ambiguous_plot_sections`, `missing_biography_intro`, `api_error` and `missing_article_html`. Missing records keep their programmatic status; text is never fabricated.
 
 The outputs retain the full selection even during a pilot. Consequently, most rows initially have `pending` status. `collection_attempted_for_all_targets` excludes pending requests and API failures; it does not assert that text was found. `full_enrichment_complete` requires available text for every target and at least three available biographies per film. Legitimate missing pages and the insufficient-principal list must be examined and reported before submission, even if the API traversal is finished.
 
@@ -105,3 +105,5 @@ docker compose exec -T spark python -m jobs.enrichment.supplement_cached_biograp
 ```
 
 Replace the run ID with your actual selected run. Initial selections and rankings remain intact. A new snapshot records the added links separately and updates film-level coverage; unique biography counts stay unchanged. When present, the manifest's `film_people_path` identifies the effective associations, including supplements. Use this path for downstream coverage checks rather than only `selection/film_people`.
+
+For cached articles whose synopsis was not extracted, use the [conservative synopsis recovery guide](SYNOPSIS_RECOVERY.md). This targeted stage preserves existing texts and supplementary associations, makes no HTTP requests and records why a candidate was accepted or left for review.

@@ -2,6 +2,8 @@
 
 import re
 from html.parser import HTMLParser
+from urllib.parse import unquote, urlparse
+from unicodedata import normalize
 
 from pyspark.sql import Window, functions as F, types as T
 
@@ -33,6 +35,11 @@ def select_people(principals, films, per_film=3):
     )
 
 
+PLOT_HEADINGS = {"plot", "synopsis", "plot synopsis", "plot summary", "story",
+                 "summary", "premise", "storyline"}
+SYNOPSIS_EXTRACTION_VERSION = "conservative-h2-v2"
+
+
 class ArticleParagraphs(HTMLParser):
     """Used inside a Spark UDF; extract source paragraphs without generating text."""
 
@@ -46,6 +53,9 @@ class ArticleParagraphs(HTMLParser):
         self.paragraph = None
         self.paragraphs = []
         self.has_plot = False
+        self.plot_section_index = 0
+        self.active_plot_section = None
+        self.nonempty_plot_sections = set()
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -61,7 +71,7 @@ class ArticleParagraphs(HTMLParser):
             self.seen_heading = True
             self.heading_parts = []
         elif tag == "p":
-            plot = self.heading in {"plot", "synopsis", "plot synopsis", "plot summary", "story"}
+            plot = self.heading in PLOT_HEADINGS
             if (self.kind == "film" and plot) or (self.kind == "person" and not self.seen_heading):
                 self.paragraph = []
         elif tag == "br" and self.paragraph is not None:
@@ -74,12 +84,19 @@ class ArticleParagraphs(HTMLParser):
             return
         if tag == "h2" and self.heading_parts is not None:
             self.heading = re.sub(r"\s+", " ", "".join(self.heading_parts)).strip().lower()
-            self.has_plot |= self.heading in {"plot", "synopsis", "plot synopsis", "plot summary", "story"}
+            self.has_plot |= self.heading in PLOT_HEADINGS
+            if self.heading in PLOT_HEADINGS:
+                self.plot_section_index += 1
+                self.active_plot_section = self.plot_section_index
+            else:
+                self.active_plot_section = None
             self.heading_parts = None
         elif tag == "p" and self.paragraph is not None:
             text = re.sub(r"\s+", " ", "".join(self.paragraph)).strip()
             if text:
                 self.paragraphs.append(text)
+                if self.kind == "film" and self.active_plot_section is not None:
+                    self.nonempty_plot_sections.add(self.active_plot_section)
             self.paragraph = None
 
     def handle_data(self, data):
@@ -95,10 +112,44 @@ def article_text(markup, kind):
         return None, "missing_article_html"
     parser = ArticleParagraphs(kind)
     parser.feed(markup)
+    if kind == "film" and len(parser.nonempty_plot_sections) > 1:
+        return None, "ambiguous_plot_sections"
     text = "\n\n".join(parser.paragraphs)
     if text:
         return text, "available"
     return None, "missing_plot_section" if kind == "film" else "missing_biography_intro"
+
+
+def same_wikipedia_article(article_url, parsed_title):
+    """Conservative recovery guard: redirects to a different page need review."""
+    if not article_url or not parsed_title:
+        return False
+    parsed = urlparse(article_url)
+    if parsed.scheme not in {"http", "https"} or parsed.hostname != "en.wikipedia.org":
+        return False
+    if not parsed.path.startswith("/wiki/"):
+        return False
+    def canonical(value):
+        return re.sub(r"\s+", " ", normalize("NFC", value).replace("_", " ")).strip().casefold()
+    return canonical(unquote(parsed.path[len("/wiki/"):])) == canonical(parsed_title)
+
+
+def apply_synopsis_recoveries(films, recoveries):
+    """Update missing synopsis/status only; retain all other film columns."""
+    joined = films.alias("old").join(
+        recoveries.select("tconst", F.col("synopsis").alias("_new_synopsis")),
+        "tconst", "left",
+    )
+    eligible = ((F.col("old.status") == "missing_plot_section")
+                & F.col("_new_synopsis").isNotNull()
+                & (F.length(F.trim("_new_synopsis")) > 0))
+    return joined.select(*[
+        F.when(eligible, F.col("_new_synopsis")).otherwise(F.col("old.synopsis")).alias(name)
+        if name == "synopsis" else
+        F.when(eligible, F.lit("available")).otherwise(F.col("old.status")).alias(name)
+        if name == "status" else F.col("old." + name).alias(name)
+        for name in films.columns
+    ])
 
 
 RAW_SCHEMA = T.StructType([

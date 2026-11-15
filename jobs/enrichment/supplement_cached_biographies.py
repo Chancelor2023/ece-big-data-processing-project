@@ -31,7 +31,7 @@ def main():
     publication_path = root / "current_content.json"
     publication_bytes = publication_path.read_bytes()
     publication = json.loads(publication_bytes)
-    if publication.get("stage") == "cached_biography_supplement":
+    if publication.get("supplemental_film_people_path"):
         print(json.dumps({"status": "already_published", "snapshot": publication["snapshot"]}), flush=True)
         return
     selection_bytes = (root / "selection_summary.json").read_bytes()
