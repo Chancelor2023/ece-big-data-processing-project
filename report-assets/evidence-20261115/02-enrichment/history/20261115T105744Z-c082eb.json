@@ -1,0 +1,64 @@
+{
+  "checked_at_utc": "2026-11-15T11:00:54.553732+00:00",
+  "run_id": "20261114T142005Z",
+  "content_snapshot": "20261115T105744Z-c082eb",
+  "status": "passed",
+  "checks": {
+    "effective_link_count_matches_summary": true,
+    "effective_links_unique": true,
+    "initial_links_preserved": true,
+    "film_count": true,
+    "film_unique_nonnull_keys": true,
+    "film_statuses_match_published_summary": true,
+    "film_all_requests_attempted": true,
+    "film_available_text_and_lineage": true,
+    "film_matches_full_request_set": true,
+    "person_count": true,
+    "person_unique_nonnull_keys": true,
+    "person_statuses_match_published_summary": true,
+    "person_all_requests_attempted": true,
+    "person_available_text_and_lineage": true,
+    "person_matches_full_request_set": true,
+    "coverage_all_film_keys": true,
+    "biography_counts_independently_recomputed": true,
+    "biography_counts_between_zero_and_three": true,
+    "films_with_three_matches_summary": true
+  },
+  "counts": {
+    "film": 7263,
+    "person": 11443
+  },
+  "statuses": {
+    "film": {
+      "missing_plot_section": 378,
+      "ambiguous_match": 6,
+      "no_english_article": 332,
+      "not_found": 564,
+      "available": 5983
+    },
+    "person": {
+      "ambiguous_match": 14,
+      "no_english_article": 1200,
+      "missing_biography_intro": 1,
+      "not_found": 2173,
+      "available": 8055
+    }
+  },
+  "film_biography_distribution": {
+    "2": 591,
+    "1": 435,
+    "0": 412,
+    "3": 5825
+  },
+  "film_person_links": 22611,
+  "available_synopses": 5983,
+  "synopsis_percent": 82.37642847308275,
+  "available_biographies": 8055,
+  "biography_percent": 70.39237962072883,
+  "films_with_three_available_biographies": 5825,
+  "films_with_three_percent": 80.2010188627289,
+  "films_with_synopsis_and_three_biographies": 5329,
+  "both_percent": 73.37188489604847,
+  "collection_attempted_for_all_targets": true,
+  "full_enrichment_complete": false
+}
