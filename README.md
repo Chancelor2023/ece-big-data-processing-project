@@ -12,22 +12,28 @@ Repository: [Chancelor2023/ece-big-data-processing-project](https://github.com/C
 
 Start with [PROJECT.md](PROJECT.md) for contributors, setup, processing order and operations. Complete the actual email addresses in its contributor table before submission. [REPORT.md](REPORT.md) remains the group’s own results and methodological write-up; its current template must be completed by the authors.
 
+## Team
+
+Group: Ing5 Gr3.
+
+| Member | GitHub username | Email |
+| --- | --- | --- |
+| Jerry CHENG | Chancelor2023 | jerry.cheng@edu.ece.fr |
+| Brett FAJGENBAUM | Brett273 | brett.fajgenbaum@edu.ece.fr |
+
 ## Delivery status
 
-Checked on 15 November 2026. Preparation, enrichment, streaming and evidence are merged into main; exploration and the open question remain incomplete.
+This integration includes the seven-table preparation, Wikipedia enrichment, live Kafka/Spark pipeline, final Q1–Q8 runner, Wikidata P364 language pipeline, actor–director open question and complete English report. Peer review and approval are required before merging this branch into main.
 
-| Component | Current status |
-| --- | --- |
-| Environment and preparation | Seven complete IMDb tables, 78 before/after column profiles, quality and read-back checks validated |
-| Enrichment | Collection completed; cached-biography supplementation and synopsis recovery merged via #10/#11 |
-| Streaming | Real Wikipedia → Kafka → Spark test validated over fifteen minutes; 130 relevant events in the live window |
-| Evidence | Versioned bundle merged; #13 preserves exact bytes and adds an integrity verifier; published and fresh-clone checks passed |
-| Exploration Q1–Q3 | [PR #5](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/5) open; technical checks passed, documentation and approval pending |
-| Exploration Q4–Q8 | [PR #7](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/7) open; Q5/Q6 corrections and final validation pending |
-| Open question | Assigned to Brett; no delivered implementation or validated command |
-| Final report and reproduction | Personal write-up, contributor emails and complete integrated clean-clone execution pending |
+The exploration functions retain Brett's authorship. The integration fixes the runner and adds the tested collection/preparation and open-question components; original PR history is preserved.
 
-Historical enrichment coverage: 5,983/7,263 synopses, 8,055/11,443 unique biographies, 5,825 films with at least three biographies, and 5,329 with both synopsis and at least three biographies. These measurements are not a claim of complete coverage or guaranteed counts on newer sources.
+- [Execution and operations](PROJECT.md).
+- [Report and findings](REPORT.md).
+- [Exploration/P364/open-question reproduction](docs/INDEPENDENT_FINALIZATION.md).
+- [Complete query outputs](report-assets/independent-final-20261115/INDEX.md).
+- [Test and comparison evidence](report-assets/independent-validation-20261115/INDEX.md).
+
+Recorded source scope: 14,190 Q6-eligible films, 90.64% declared-language coverage, and 18,764 actor–director pairs in the paired comparison. Enrichment coverage remains partial and is quantified in the report.
 
 ## Evidence and execution guides
 
@@ -57,8 +63,8 @@ jobs/preparation/          Download, profile and clean seven IMDb tables
 jobs/enrichment/           Select, collect, prepare and improve external text
 jobs/streaming/            Live Wikipedia producer and Spark consumer
 jobs/reporting/            Evidence export and exact-byte verification
-jobs/exploration/          Q1–Q8 modules remain in PRs #5/#7
-jobs/open_question/        Placeholder; additional analysis pending
+jobs/exploration/          Final Q1–Q8 runner and P364 collection/preparation
+jobs/open_question/        Actor–director collaboration analysis
 docs/                      Execution and data-contract guides
 report-assets/             Deliberately versioned factual evidence
 notebooks/                 Interactive environment

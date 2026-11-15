@@ -1,0 +1,39 @@
+{
+  "run_id": "20261115T173528Z-ee767f",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "status": "passed",
+  "parameters": {
+    "min_votes": 1000,
+    "year_from": 1980,
+    "year_to": 2025
+  },
+  "outputs": {
+    "pair_comparison": {
+      "rows": 18764,
+      "parquet": "pair_comparison/parquet",
+      "csv": "pair_comparison/csv"
+    },
+    "pair_movie_observations": {
+      "rows": 45554,
+      "parquet": "pair_movie_observations/parquet",
+      "csv": "pair_movie_observations/csv"
+    },
+    "paired_summary": {
+      "rows": 1,
+      "parquet": "paired_summary/parquet",
+      "csv": "paired_summary/csv"
+    },
+    "sample_coverage": {
+      "rows": 1,
+      "parquet": "sample_coverage/parquet",
+      "csv": "sample_coverage/csv"
+    }
+  },
+  "question": "How do ratings of the first observed year of actor\u2013director collaborations compare to later collaboration years?",
+  "unit": "distinct actor\u2013director pair; first year measured within the declared eligible sample",
+  "within_year_order": "All movies in the first observed year remain in the first group",
+  "results_are_associational": true,
+  "finished_at_utc": "2026-11-15T17:44:38.985232+00:00",
+  "csv_format": "RFC4180; nested values JSON; UTF-8",
+  "csv_verified_at_utc": "2026-11-15T18:13:18.727207+00:00"
+}

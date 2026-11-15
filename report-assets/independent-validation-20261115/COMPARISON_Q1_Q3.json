@@ -1,0 +1,59 @@
+{
+  "run_id": "20261115T181405Z-17cf45",
+  "reference": "/workspace/results/independent_comparison_reference/pr5-69da2b4/20261114T115800Z-6c04bdd1",
+  "candidate": "/workspace/results/independent_exploration/20261115T174842Z-15e20a",
+  "catalogs_match": true,
+  "parameters_documented": true,
+  "parameters_match": true,
+  "analysis_parameters_match": null,
+  "questions": [
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "outputs": {
+    "q1_runtime_outliers": {
+      "counts": {
+        "equal": 13700
+      },
+      "column_sets_match": true,
+      "reference_only_columns": [],
+      "candidate_only_columns": [],
+      "differences": {
+        "rows": 0,
+        "parquet": "q1_runtime_outliers/parquet",
+        "csv": "q1_runtime_outliers/csv"
+      }
+    },
+    "q2_top_genres": {
+      "counts": {
+        "equal": 138
+      },
+      "column_sets_match": true,
+      "reference_only_columns": [],
+      "candidate_only_columns": [],
+      "differences": {
+        "rows": 0,
+        "parquet": "q2_top_genres/parquet",
+        "csv": "q2_top_genres/csv"
+      }
+    },
+    "q3_top_vs_rest": {
+      "counts": {
+        "equal": 92
+      },
+      "column_sets_match": true,
+      "reference_only_columns": [],
+      "candidate_only_columns": [],
+      "differences": {
+        "rows": 0,
+        "parquet": "q3_top_vs_rest/parquet",
+        "csv": "q3_top_vs_rest/csv"
+      }
+    }
+  },
+  "missing_outputs": [],
+  "status": "comparison_completed",
+  "equivalence_confirmed": true,
+  "full_q1_q8_equivalence": false
+}

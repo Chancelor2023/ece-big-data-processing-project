@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "run_id": "20261115T172917Z-0ad8a6",
+  "snapshot": "20261115T174630Z-b9b01c",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "min_rating": 7.0,
+  "min_votes": 1000,
+  "eligible_films": 14190,
+  "declared_films": 12862,
+  "status_counts": {
+    "declared": 12862,
+    "ambiguous_match": 11,
+    "no_p364": 812,
+    "no_wikidata_match": 505
+  },
+  "collection_complete": true,
+  "film_language_pairs": 14814,
+  "coverage_percent": 90.64129668780832,
+  "property": "P364",
+  "identity_property": "P345",
+  "prepared_at_utc": "2026-11-15T17:47:52.150539+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "files": [
+    {
+      "path": "COMPARISON_Q1_Q3.json",
+      "bytes": 1516,
+      "sha256": "6c78d0491d8de3b08c2cb34c2cf85098b79d918b33f7658d4662638ebe527bc2"
+    },
+    {
+      "path": "INDEX.md",
+      "bytes": 486,
+      "sha256": "0dc044e855b46e6f64425685d3c0eee0d87aee65d59de6fe3d5262d73b0538b6"
+    },
+    {
+      "path": "SHA256SUMS.txt",
+      "bytes": 318,
+      "sha256": "d23f63a8b17174f6cd972c0c5382a3c9550b978bb7f6661211bfb47b45598ebc"
+    },
+    {
+      "path": "SOURCES.csv",
+      "bytes": 263,
+      "sha256": "1b0829325397e30e55f531d3845ca9d2e4f103017db70a72e9c5a305a3365c65"
+    },
+    {
+      "path": "TESTS.json",
+      "bytes": 509,
+      "sha256": "500e11fe03869c00970caafd0292e21a35af51da2211ef73fb135aca40b562d7"
+    }
+  ]
+}
