@@ -41,6 +41,9 @@ After starting the environment as documented in PROJECT.md, verify the packaged 
 
 ```bash
 docker compose exec -T spark python -m jobs.reporting.verify_evidence
+docker compose exec -T spark python -m jobs.exploration.run
+docker compose exec -T spark python -m unittest tests.test_exploration -v
+
 ```
 
 Expected bundle counts: 64 manifest entries, 63 checksum entries, 48 source copies and 18 CSVs, with `status: passed`. This check does not reproduce the processing pipeline. For a full new run, follow PROJECT.md in order; use your own selection/run IDs and run one Spark application at a time. After base text preparation, apply biography supplementation before synopsis recovery.
