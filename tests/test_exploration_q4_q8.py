@@ -66,7 +66,7 @@ class ExplorationQ4Q8Test(unittest.TestCase):
         out = declining_series(basics, rat, eps)
         self.assertEqual([r.parentTconst for r in out.collect()], ["s1"])
 
-    def test_q6_languages_from_original_language_table(self):
+    def test_q6_languages_basic(self):
         basics = self.df([("m1", "movie", "A", "A", 2000), ("m2", "movie", "B", "B", 2000),
                           ("m3", "movie", "C", "C", 2000)], BASICS_COLS)
         rat = self.df([(t, 8.0, 5000) for t in ("m1", "m2", "m3")],
@@ -75,7 +75,7 @@ class ExplorationQ4Q8Test(unittest.TestCase):
                         ("m2", "en"),
                         ("m2", "en"),     # duplicate row must not inflate counts
                         ("m3", "de")],
-                       ["tconst", "original_language"])
+                       ["tconst", "language"])
         princ = self.df([("m1", "a1", "actor"), ("m2", "a1", "actor"), ("m3", "a1", "actor"),
                          ("m1", "a2", "actress"), ("m2", "a2", "actress"),
                          ("m1", "a3", "actor")], ["tconst", "nconst", "category"])
@@ -83,7 +83,7 @@ class ExplorationQ4Q8Test(unittest.TestCase):
             basics, rat, princ, lang, self.names(["a1", "a2", "a3"])).collect()}
         self.assertEqual(out, {"a1": 3, "a2": 2})
 
-    def test_q6_languages_from_original_language_table(self):
+    def test_q6_languages_from_languages_table(self):
         basics = self.df([("m1", "movie", "A", "A", 2000), ("m2", "movie", "B", "B", 2000),
                           ("m3", "movie", "C", "C", 2000)], BASICS_COLS)
         rat = self.df([(t, 8.0, 5000) for t in ("m1", "m2", "m3")],
@@ -92,7 +92,7 @@ class ExplorationQ4Q8Test(unittest.TestCase):
                         ("m2", "en"),
                         ("m2", "en"),     # duplicate row must not inflate counts
                         ("m3", "de")],
-                       ["tconst", "original_language"])
+                       ["tconst", "language"])
         princ = self.df([("m1", "a1", "actor"), ("m2", "a1", "actor"), ("m3", "a1", "actor"),
                          ("m1", "a2", "actress"), ("m2", "a2", "actress"),
                          ("m1", "a3", "actor")], ["tconst", "nconst", "category"])
@@ -100,23 +100,25 @@ class ExplorationQ4Q8Test(unittest.TestCase):
             basics, rat, princ, lang, self.names(["a1", "a2", "a3"])).collect()}
         self.assertEqual(out, {"a1": 3, "a2": 2})
 
-    def test_q6_ignores_null_empty_and_conflicting_languages(self):
-        titles = ("m1", "m2", "m3", "m4", "m5")
+    def test_q6_ignores_null_and_empty_keeps_multilingual_films(self):
+        titles = ["m1", "m2", "m3", "m4", "m5"]
         basics = self.df([(t, "movie", t, t, 2000) for t in titles], BASICS_COLS)
         rat = self.df([(t, 8.0, 5000) for t in titles],
                       ["tconst", "averageRating", "numVotes"])
         lang = self.df([("m1", "fr"),
-                        ("m2", "en"), ("m2", "es"),   # conflict -> title ignored
+                        ("m2", "en"), ("m2", "es"),   # multi-language film -> both kept
                         ("m3", None),                 # null -> ignored
                         ("m4", ""),                   # empty -> ignored
                         ("m5", "de")],
-                       "tconst string, original_language string")
+                       "tconst string, language string")
         princ = self.df([(t, "a1", "actor") for t in titles],
                         ["tconst", "nconst", "category"])
-        out = {r.nconst: r.n_languages for r in multilingual_actors(
-            basics, rat, princ, lang, self.names(["a1"])).collect()}
-        self.assertEqual(out, {"a1": 2})  # only "fr" and "de" survive
-
+        rows = multilingual_actors(
+            basics, rat, princ, lang, self.names(["a1"])).collect()
+        out = {r.nconst: r.n_languages for r in rows}
+        self.assertEqual(out, {"a1": 4})  # fr, en, es, de
+        self.assertEqual(rows[0].n_successful_movies, 3)  # m1, m2, m5 (distinct)
+        
     def test_q7_early_peak(self):
         years = range(2000, 2021)  # 21 movies, 20-year career
         basics, rat, princ = [], [], []

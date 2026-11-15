@@ -81,6 +81,7 @@ def compute_q3(stats, p):
                         F.try_divide(F.col("votes") * F.lit(100.0),
                                      F.sum("votes").over(year)))
 
+
 def rated_movies(basics, ratings, min_votes=0) -> DataFrame:
     """Films (titleType='movie') avec note, une ligne par tconst."""
     movies = (basics.filter(F.col("titleType") == "movie")
@@ -89,6 +90,7 @@ def rated_movies(basics, ratings, min_votes=0) -> DataFrame:
                             & (F.col("numVotes") >= min_votes))
              .select("tconst", "averageRating", "numVotes"))
     return movies.join(rated, "tconst", "inner")
+
 
 # --------------------------------------------------------------------- Q4
 def one_hit_directors(basics, ratings, crew, names, high=8.0, low=6.0,
@@ -123,10 +125,24 @@ def one_hit_directors(basics, ratings, crew, names, high=8.0, low=6.0,
 # --------------------------------------------------------------------- Q5
 def declining_series(basics, ratings, episodes, min_seasons=3,
                      min_episodes=10, min_votes=0) -> DataFrame:
-    """Series with >= min_seasons seasons of >= min_episodes episodes, whose
-    worst episode is in the last season and best in the first two seasons.
-    Ties: rating, then most votes, then tconst (deterministic)."""
-    eps = episodes.filter(F.col("seasonNumber").isNotNull())
+    """Series with >= min_seasons eligible ordinary seasons and >= min_episodes
+    episodes in each counted season; worst episode in the last ordinary season
+    and best in the first two ordinary seasons.
+
+    Policy: season 0 is IMDb's specials bucket, not an ordinary season. It is
+    excluded (together with null season numbers) from eligibility counts,
+    season ordering, the last/first-two comparisons, and the best/worst episode
+    candidates. The last season is the highest positive season number present;
+    the first two are the two lowest positive season numbers present (gaps in
+    numbering are not filled), whether or not each reaches min_episodes.
+    Ties: rating, then most votes, then tconst (deterministic).
+
+    Note: a series with a single positive season has no second season
+    (second_season is NULL) and is therefore excluded by the final comparison.
+    With min_seasons >= 2 this case cannot occur.
+    """
+    # Ordinary seasons only: drops season 0 and NULL season numbers.
+    eps = episodes.filter(F.col("seasonNumber") > 0)
 
     seasons = (
         eps.groupBy("parentTconst", "seasonNumber").agg(F.count("*").alias("n_eps"))
@@ -136,6 +152,7 @@ def declining_series(basics, ratings, episodes, min_seasons=3,
             F.sort_array(F.collect_set("seasonNumber")).alias("season_list"),
         )
         .filter(F.col("n_full_seasons") >= min_seasons)
+        # NULL when only one ordinary season exists (see docstring).
         .withColumn("second_season", F.element_at("season_list", 2))
         .drop("season_list")
     )
@@ -170,33 +187,41 @@ def declining_series(basics, ratings, episodes, min_seasons=3,
 
 
 # --------------------------------------------------------------------- Q6
-def original_languages(basics, akas) -> DataFrame:
-    """IMDb has no 'original language' column. Proxy: language of the aka
-    flagged isOriginalTitle, or of an aka whose title equals originalTitle.
-    Titles with several candidate languages are ambiguous and dropped."""
-    id_col = "titleId" if "titleId" in akas.columns else "tconst"
-    cand = (
-        akas.filter(F.col("language").isNotNull() & (F.col("language") != ""))
-        .withColumnRenamed(id_col, "tconst")
-        .join(basics.select("tconst", "originalTitle"), "tconst")
-        .filter((F.col("isOriginalTitle").cast("int") == 1)
-                | (F.col("title") == F.col("originalTitle")))
-    )
-    return (cand.groupBy("tconst")
-            .agg(F.collect_set("language").alias("_langs"))
-            .filter(F.size("_langs") == 1)
-            .select("tconst", F.col("_langs")[0].alias("language")))
+# Contract: languages come from Wikidata P364 (matched through the exact IMDb
+# id, P345), one row per distinct (tconst, language) pair. There is NO fallback
+# to title.akas: a film without a declared language has no row in this table
+# and is tracked through the collection status table (see q6_coverage).
+
+def film_languages(languages_table) -> DataFrame:
+    """Normalize the Wikidata P364 table: one row per distinct (tconst, language).
+
+    Input columns: `tconst` and `language` (Wikidata language QID); any other
+    columns (label, provenance, ...) are ignored here. Several languages for
+    one film are valid and are all kept. Duplicate pairs are collapsed;
+    null/blank tconst or language rows are dropped.
+    """
+    return (languages_table
+            .select(F.trim(F.col("tconst")).alias("tconst"),
+                    F.trim(F.col("language")).alias("language"))
+            .filter(F.col("tconst").isNotNull() & (F.col("tconst") != "")
+                    & F.col("language").isNotNull() & (F.col("language") != ""))
+            .distinct())
 
 
-def multilingual_actors(basics, ratings, principals, akas, names,
+def multilingual_actors(basics, ratings, principals, languages_table, names,
                         min_rating=7.0, min_votes=1000, min_languages=2) -> DataFrame:
-    """Actors/actresses with successful movies in >= min_languages languages."""
+    """Actors/actresses with successful movies in >= min_languages distinct
+    Wikidata (P364) languages. A film with several declared languages counts
+    in each of them; film-language pairs are deduplicated first.
+    n_successful_movies is a distinct count of films, not of film-language rows.
+    """
     hits = (rated_movies(basics, ratings, min_votes)
             .filter(F.col("averageRating") >= min_rating).select("tconst"))
     cast = (principals.filter(F.col("category").isin(ACTING))
             .select("tconst", "nconst").distinct())
     return (
-        cast.join(hits, "tconst").join(original_languages(basics, akas), "tconst")
+        cast.join(hits, "tconst")
+        .join(film_languages(languages_table), "tconst")
         .groupBy("nconst").agg(
             F.countDistinct("language").alias("n_languages"),
             F.sort_array(F.collect_set("language")).alias("languages"),
@@ -205,6 +230,36 @@ def multilingual_actors(basics, ratings, principals, akas, names,
         .join(names.select("nconst", "primaryName"), "nconst", "left")
         .orderBy(F.col("n_languages").desc(), "nconst")
     )
+
+
+def q6_actors_3plus_languages(q6_actors: DataFrame) -> DataFrame:
+    """Subset of the main Q6 actor output with at least three languages."""
+    return q6_actors.filter(F.col("n_languages") >= 3)
+
+
+def q6_eligible_films(basics, ratings, min_rating=7.0, min_votes=1000) -> DataFrame:
+    """Films meeting the Q6 success thresholds (the collection perimeter)."""
+    return (rated_movies(basics, ratings, min_votes)
+            .filter(F.col("averageRating") >= min_rating)
+            .select("tconst").distinct())
+
+
+def q6_coverage(eligible_films, collection_status) -> DataFrame:
+    """Coverage over Q6-eligible films: number of films per collection status.
+
+    `collection_status` has one row per collected film with columns `tconst`
+    and `status` (e.g. declared, no_p364, no_wikidata_match, ambiguous_match,
+    error). Eligible films absent from it get status 'not_collected'; a
+    non-zero 'not_collected' count means the collection is incomplete and Q6
+    must not be reported as final.
+    """
+    status = (collection_status.select("tconst", "status")
+              .groupBy("tconst").agg(F.first("status").alias("status")))
+    return (eligible_films.select("tconst")
+            .join(status, "tconst", "left")
+            .withColumn("status", F.coalesce(F.col("status"), F.lit("not_collected")))
+            .groupBy("status").agg(F.count("*").alias("n_films"))
+            .orderBy("status"))
 
 
 # --------------------------------------------------------------------- Q7
