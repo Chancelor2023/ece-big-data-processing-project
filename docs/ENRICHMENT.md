@@ -95,3 +95,13 @@ people = spark.read.parquet(str(root / publication["path"] / "people"))
 ```
 
 Raw articles, cache files, Parquet outputs and summaries are ignored by Git. Commit the code and this guide; peers reproduce the data with the commands above. This branch depends on the seven-table preparation delivery until that PR is merged.
+
+## Reuse existing biographies for additional IMDb principals
+
+After final text preparation, [the cached-biography supplement](CACHED_BIOGRAPHIES.md) can add sourced associations for films below three available biographies, without new HTTP requests or changed text:
+
+```bash
+docker compose exec -T spark python -m jobs.enrichment.supplement_cached_biographies --run-id YYYYMMDDTHHMMSSZ
+```
+
+Replace the run ID with your actual selected run. Initial selections and rankings remain intact. A new snapshot records the added links separately and updates film-level coverage; unique biography counts stay unchanged. When present, the manifest's `film_people_path` identifies the effective associations, including supplements. Use this path for downstream coverage checks rather than only `selection/film_people`.
