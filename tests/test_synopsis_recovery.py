@@ -17,6 +17,15 @@ class SynopsisParserTests(unittest.TestCase):
         markup = '<h2>Summary</h2><p>First film.</p><h2>Premise</h2><p>Another film.</p>'
         self.assertEqual(article_text(markup, "film"), (None, "ambiguous_plot_sections"))
 
+    def test_empty_duplicate_plot_section_preserves_synopsis(self):
+        populated = '<h2>Plot</h2><p>Source synopsis.</p>'
+        for empty in ('<h2>Plot</h2>', '<h2>Plot</h2><p> \n </p>'):
+            for sections in (empty + populated, populated + empty):
+                with self.subTest(sections=sections):
+                    markup = sections + '<h2>Reception</h2><p>Review text.</p>'
+                    self.assertEqual(article_text(markup, "film"),
+                                     ("Source synopsis.", "available"))
+
     def test_h3_and_mixed_headings_are_not_accepted(self):
         for markup in ('<h2>Films</h2><h3>Plot</h3><p>Unscoped film.</p>',
                        '<h2>Plot and theme</h2><p>Mixed content.</p>'):
