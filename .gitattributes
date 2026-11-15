@@ -3,3 +3,6 @@
 *.py text eol=lf
 *.yaml text eol=lf
 Dockerfile text eol=lf
+
+# Evidence hashes cover exact source bytes, including CSV record terminators.
+report-assets/** -text whitespace=cr-at-eol
