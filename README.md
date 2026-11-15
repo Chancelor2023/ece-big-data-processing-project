@@ -41,9 +41,6 @@ After starting the environment as documented in PROJECT.md, verify the packaged 
 
 ```bash
 docker compose exec -T spark python -m jobs.reporting.verify_evidence
-docker compose exec -T spark python -m jobs.exploration.run
-docker compose exec -T spark python -m unittest tests.test_exploration -v
-
 ```
 
 Expected bundle counts: 64 manifest entries, 63 checksum entries, 48 source copies and 18 CSVs, with `status: passed`. This check does not reproduce the processing pipeline. For a full new run, follow PROJECT.md in order; use your own selection/run IDs and run one Spark application at a time. After base text preparation, apply biography supplementation before synopsis recovery.
@@ -76,3 +73,23 @@ Raw archives, article bodies, Parquet, caches, credentials and checkpoints are e
 
 Use one feature branch per task and obtain a peer review and formal approval before merging its PR. No direct commits to main. Comments such as “All good” and a merge action are not formal GitHub approvals. Historical review-trace gaps remain to be clarified; do not describe later reviews as having preceded a merge.
 
+## Changing parameters
+
+class Params:
+    min_runtime: int = 40
+    z_threshold: float = 2.0
+    min_genre_size: int = 30
+    min_votes: int = 1000
+    year_from: int = 1980
+    year_to: int = 2025
+    top_n: int = 3
+
+## Running the exploration
+
+```bash
+docker compose exec -T spark python -m jobs.exploration.run
+docker compose exec -T spark python -m unittest tests.test_exploration -v
+```
+
+## Q3 zero-vote case
+The share is `null` only when the annual total used as the denominator is zero. A group with zero votes and a positive annual total has a share of `0`.
