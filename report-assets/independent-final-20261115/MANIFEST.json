@@ -1,0 +1,116 @@
+{
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "generated_at_utc": "2026-11-15T18:15:32.939165+00:00",
+  "files": [
+    {
+      "path": "INDEX.md",
+      "bytes": 2210,
+      "sha256": "b5a291e9070809a475e1d64fbea27aa0721268634d4c6b23272be5fa87bf6704"
+    },
+    {
+      "path": "SHA256SUMS.txt",
+      "bytes": 2087,
+      "sha256": "818f06a5e99425b1528a8da207ffedb36736150fa17910110046cc1ba7d0bd88"
+    },
+    {
+      "path": "SOURCES.csv",
+      "bytes": 4548,
+      "sha256": "21a18505ebdceb3e0de6975702cfa11adf8aa8e577faea8b0bb30e2acbb9af52"
+    },
+    {
+      "path": "VALIDATION.json",
+      "bytes": 1588,
+      "sha256": "0dab20c24d32d32c6d1da0d9ad8cecce761123af560dde9a9b7d012324fd0069"
+    },
+    {
+      "path": "exploration/q1_runtime_outliers.csv",
+      "bytes": 1538058,
+      "sha256": "7f455c91460a7b91757ee202fbf09978cd336be6b81efdfa8a7ab8340f49bd52"
+    },
+    {
+      "path": "exploration/q2_top_genres.csv",
+      "bytes": 7221,
+      "sha256": "d6124c00d070ea1d1a6ad28d5fca440ac254c53258c49ce343ea780bdd327dc2"
+    },
+    {
+      "path": "exploration/q3_top_vs_rest.csv",
+      "bytes": 6841,
+      "sha256": "1b747bef9078a16288ae0ac7f462f37bf9ce558c81522578328dad88eb5cbeaa"
+    },
+    {
+      "path": "exploration/q4_one_hit_directors.csv",
+      "bytes": 9487,
+      "sha256": "be471d890d610a8d85f11c755ef255239474a60e5b1c19920a12966982fc1c2a"
+    },
+    {
+      "path": "exploration/q5_declining_series.csv",
+      "bytes": 30923,
+      "sha256": "b973ee9cbbaab2d0cdd584b2445d1da5144140646cb05521e3cca65163294643"
+    },
+    {
+      "path": "exploration/q6_actors_3plus_languages.csv",
+      "bytes": 310476,
+      "sha256": "d5adb4da031aafebae4544ecd62014b3eff2a8d394adc298a4bf2e5c31eafd67"
+    },
+    {
+      "path": "exploration/q6_multilingual_actors.csv",
+      "bytes": 698237,
+      "sha256": "8f740057f25f9cc8316a0ccb0bc56ab812e953e4a3d42d349bd34fccbd7521aa"
+    },
+    {
+      "path": "exploration/q7_early_peak_actors.csv",
+      "bytes": 407408,
+      "sha256": "0431c8cd513be8e5083f7142fc293a1387eccce87a5bdbc01a79f264393ac315"
+    },
+    {
+      "path": "exploration/q8_multi_talented_combinations.csv",
+      "bytes": 249,
+      "sha256": "2a9eadeecdaee024cbaad6ea11ba91bc72ec7c8de392985ca14671165805d3fd"
+    },
+    {
+      "path": "exploration/q8_multi_talented_people.csv",
+      "bytes": 1198798,
+      "sha256": "489239de769efb01a718178b79c14be5c57f7907c0bde7f57df488ad57f76d9b"
+    },
+    {
+      "path": "exploration/run.original.json",
+      "bytes": 3353,
+      "sha256": "2e8d5ee1c3e6db7d12c5506d12cf9d3bcfcdf0857a485476dccb0c61038e29e7"
+    },
+    {
+      "path": "language_sources/coverage.original.json",
+      "bytes": 589,
+      "sha256": "cfba3b84ee7e9ff85077ce4848d7f0d368d0fa8a0a5bd5bcc5ebd48c3c9a4328"
+    },
+    {
+      "path": "language_sources/film_language_lineage.csv",
+      "bytes": 2520685,
+      "sha256": "c9cf4509f50857b04bd5c514392216c96e93bf03b78ddec462ec053d8157086b"
+    },
+    {
+      "path": "open_question/pair_comparison.csv",
+      "bytes": 1708941,
+      "sha256": "55165f16a7f59e9fc2358c3c37048f7dcd92a1eccff06c11549be769312792c4"
+    },
+    {
+      "path": "open_question/pair_movie_observations.csv",
+      "bytes": 4076060,
+      "sha256": "55113acdc8200ecfa23faf47a25a2b7b453d53cb0c42bc3f445cb8d223e6db9f"
+    },
+    {
+      "path": "open_question/paired_summary.csv",
+      "bytes": 255,
+      "sha256": "83dc42a796596289762eb03cba5abc19eaf8df56864d9e78bde9f8aceba78253"
+    },
+    {
+      "path": "open_question/run.original.json",
+      "bytes": 1300,
+      "sha256": "bc3bb0f84ea3734bfe1aa3d2f5122268c321e3c098a443da4ce89ff05b1ec452"
+    },
+    {
+      "path": "open_question/sample_coverage.csv",
+      "bytes": 98,
+      "sha256": "f84b3e8e0f2c01abb28707673c299dbbbc347715f4ba1812db7ab6f7ab70169f"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "tests": 68,
+  "seconds": 240.309,
+  "command": "python -m unittest discover -s tests -v",
+  "environment": "Isolated checkout and Docker container, 4 GB, 2 CPUs",
+  "candidate_source_tree": "4386f019bef1edfb0566228f1c6542ac1bf30358",
+  "test_log_sha256": "08d374f009722779032b346a77b427332224663365f193937b2c853d682f67ba",
+  "scope": "Available automated tests; not a fresh download/recollection of every external dataset",
+  "recorded_at_utc": "2026-11-15T18:34:49.152008+00:00"
+}

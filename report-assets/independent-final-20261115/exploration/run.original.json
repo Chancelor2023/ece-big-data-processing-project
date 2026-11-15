@@ -1,0 +1,122 @@
+{
+  "run_id": "20261115T174842Z-15e20a",
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "status": "passed",
+  "questions": [
+    "Q1",
+    "Q2",
+    "Q3",
+    "Q4",
+    "Q5",
+    "Q6",
+    "Q7",
+    "Q8"
+  ],
+  "q6_mode": "final",
+  "outputs": {
+    "q1_runtime_outliers": {
+      "rows": 13700,
+      "parquet": "q1_runtime_outliers/parquet",
+      "csv": "q1_runtime_outliers/csv"
+    },
+    "q2_top_genres": {
+      "rows": 138,
+      "parquet": "q2_top_genres/parquet",
+      "csv": "q2_top_genres/csv"
+    },
+    "q3_top_vs_rest": {
+      "rows": 92,
+      "parquet": "q3_top_vs_rest/parquet",
+      "csv": "q3_top_vs_rest/csv"
+    },
+    "q4_one_hit_directors": {
+      "rows": 181,
+      "parquet": "q4_one_hit_directors/parquet",
+      "csv": "q4_one_hit_directors/csv"
+    },
+    "q5_declining_series": {
+      "rows": 475,
+      "parquet": "q5_declining_series/parquet",
+      "csv": "q5_declining_series/csv"
+    },
+    "q6_multilingual_actors": {
+      "rows": 11815,
+      "parquet": "q6_multilingual_actors/parquet",
+      "csv": "q6_multilingual_actors/csv"
+    },
+    "q6_actors_3plus_languages": {
+      "rows": 4478,
+      "parquet": "q6_actors_3plus_languages/parquet",
+      "csv": "q6_actors_3plus_languages/csv"
+    },
+    "q7_early_peak_actors": {
+      "rows": 5600,
+      "parquet": "q7_early_peak_actors/parquet",
+      "csv": "q7_early_peak_actors/csv"
+    },
+    "q8_multi_talented_people": {
+      "rows": 26715,
+      "parquet": "q8_multi_talented_people/parquet",
+      "csv": "q8_multi_talented_people/csv"
+    },
+    "q8_multi_talented_combinations": {
+      "rows": 7,
+      "parquet": "q8_multi_talented_combinations/parquet",
+      "csv": "q8_multi_talented_combinations/csv"
+    }
+  },
+  "analysis_origin": "Brett273, commit 3ad08a7; independent runner and P364 integration",
+  "parameters": {
+    "min_runtime": 40,
+    "z_threshold": 2.0,
+    "min_genre_size": 30,
+    "min_votes": 1000,
+    "year_from": 1980,
+    "year_to": 2025,
+    "top_n": 3
+  },
+  "analysis_parameters": {
+    "Q4_HIGH_RATING": 8.0,
+    "Q4_LOW_AVG_RATING": 6.0,
+    "Q4_MIN_OTHER_MOVIES": 2,
+    "Q4_MIN_VOTES": 100,
+    "Q5_MIN_EPISODES_PER_SEASON": 10,
+    "Q5_MIN_EPISODE_VOTES": 10,
+    "Q5_MIN_FULL_SEASONS": 3,
+    "Q6_MIN_LANGUAGES": 2,
+    "Q6_MIN_LANGUAGES_STRICT": 3,
+    "Q6_SUCCESS_MIN_VOTES": 1000,
+    "Q6_SUCCESS_RATING": 7.0,
+    "Q7_MIN_CAREER_YEARS": 20,
+    "Q7_MIN_MOVIES": 15,
+    "Q7_MIN_VOTES": 100,
+    "Q8_MIN_VOTES": 100
+  },
+  "language_coverage": {
+    "status": "passed",
+    "run_id": "20261115T172917Z-0ad8a6",
+    "snapshot": "20261115T174630Z-b9b01c",
+    "source_catalog": "20261114T115800Z-6c04bdd1",
+    "min_rating": 7.0,
+    "min_votes": 1000,
+    "eligible_films": 14190,
+    "declared_films": 12862,
+    "status_counts": {
+      "declared": 12862,
+      "ambiguous_match": 11,
+      "no_p364": 812,
+      "no_wikidata_match": 505
+    },
+    "collection_complete": true,
+    "film_language_pairs": 14814,
+    "coverage_percent": 90.64129668780832,
+    "property": "P364",
+    "identity_property": "P345",
+    "prepared_at_utc": "2026-11-15T17:47:52.150539+00:00"
+  },
+  "q6_status": "passed",
+  "full_q1_q8_complete": true,
+  "finished_at_utc": "2026-11-15T18:07:54.382744+00:00",
+  "csv_format": "RFC4180; nested values JSON; UTF-8",
+  "csv_verified_at_utc": "2026-11-15T18:13:05.213564+00:00"
+}

@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "checks": {
+    "exploration_q1_runtime_outliers_rows": true,
+    "exploration_q2_top_genres_rows": true,
+    "exploration_q3_top_vs_rest_rows": true,
+    "exploration_q4_one_hit_directors_rows": true,
+    "exploration_q5_declining_series_rows": true,
+    "exploration_q6_multilingual_actors_rows": true,
+    "exploration_q6_actors_3plus_languages_rows": true,
+    "exploration_q7_early_peak_actors_rows": true,
+    "exploration_q8_multi_talented_people_rows": true,
+    "exploration_q8_multi_talented_combinations_rows": true,
+    "open_question_pair_comparison_rows": true,
+    "open_question_pair_movie_observations_rows": true,
+    "open_question_paired_summary_rows": true,
+    "open_question_sample_coverage_rows": true,
+    "q2_three_per_year": true,
+    "q2_full_1980_2025": true,
+    "q3_shares_sum_100": true,
+    "q3_top_group_three": true,
+    "q4_thresholds": true,
+    "q5_ordinary_seasons": true,
+    "q6_language_counts": true,
+    "q6_three_plus_exact": true,
+    "q7_career_thresholds": true,
+    "q8_role_counts": true,
+    "open_pair_counts": true,
+    "open_summary_matches_pairs": true,
+    "PROJECT.md_unchanged": true,
+    "REPORT.md_unchanged": true
+  },
+  "source_catalog": "20261114T115800Z-6c04bdd1",
+  "language_run": "20261115T172917Z-0ad8a6",
+  "exploration_run": "20261115T174842Z-15e20a",
+  "open_run": "20261115T173528Z-ee767f",
+  "protected_files": {
+    "PROJECT.md": "45df1310234450c2b1e39e633a0cbf26fd7cc33e32de3ea79cad17affa9b4c76",
+    "REPORT.md": "79546a62c32584b2c6ea98c643b96bd35df159375325e4fe299cc339c13fba31"
+  }
+}

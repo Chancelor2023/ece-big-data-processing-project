@@ -4,31 +4,26 @@
 
 | Contributor | GitHub username | Email |
 | --- | --- | --- |
-| Jerry CHENG | Chancelor2023 | To be completed by Jerry |
-| Brett FAJGENBAUM | Brett273 | To be completed by Brett |
+| Jerry CHENG | Chancelor2023 | jerry.cheng@edu.ece.fr |
+| Brett FAJGENBAUM | Brett273 | brett.fajgenbaum@edu.ece.fr |
 
-Class group: Ing5 Gr3. Complete the actual email addresses before submission.
+Class group: Ing5 Gr3. Contributor email addresses supplied by Jerry for publication.
 
 ## Environment scope
 
 The project provides Kafka, Spark batch processing, Spark Structured Streaming, JupyterLab and persistent local data. All seven IMDb tables have download, profiling, cleaning, quarantine and publication jobs. Film/person enrichment and live Wikipedia ingestion are implemented.
 
-Delivery status checked on 15 November 2026 (Europe/Paris):
+This integration branch combines the existing preparation, enrichment and streaming with the validated exploration runner, Wikidata P364 pipeline and actor–director open question. It requires Brett's peer review and approval before merging into main.
 
-| Component | Delivery and remaining work |
+| Component | Status on this integration branch |
 | --- | --- |
-| Environment and seven-table preparation | Merged into `main` through PRs #1–#3; full-source execution validated |
-| Wikipedia → Kafka → Spark | PR #4 merged; a real 15-minute session was validated |
-| Film/person enrichment | PR #6 merged; full collection completed, final Spark preparation and coverage checks passed |
-| Collection resume and Windows progress viewer | PR #8 merged, including the execution guide from #9 |
-| Cached biographies and synopsis recovery | PRs #10 and #11 merged; 916 supplementary associations and 102 recovered synopses |
-| Versioned evidence and integrity | #12 included through #11; #13 merged; published hashes and a fresh-clone evidence check passed |
-| Exploration Q1–Q3 | PR #5 open, `69da2b4`; six tests and full-data execution passed; documentation and approval pending |
-| Exploration Q4–Q8 | PR #7 open, `beebb2d`; Q5/Q6 corrections and final validation pending; two Q6 tests fail and the announced regression module is absent |
-| Open question and integrated clean-clone run | No delivered open-question implementation; complete end-to-end reproduction pending |
-| Report and contributor contacts | REPORT.md still needs the group’s results and own reasoning; actual email addresses remain to be completed |
-
-Preparation, enrichment, streaming and evidence are integrated in `main`; exploration remains in PRs #5/#7. Commands for an unmerged component require its branch. The completed collection does not imply complete text coverage. The fresh-clone check validated evidence integrity only, not all processing stages. Run the full end-to-end check after the remaining components are integrated. Do not switch or replace the mounted checkout while a job is running.
+| Environment and seven-table preparation | Existing main implementation; full-source outputs and read-back checks available |
+| Wikipedia text enrichment | Collection finished; supplementary biography links and synopsis recovery validated; coverage remains partial |
+| Wikipedia → Kafka → Spark | Existing main implementation; versioned real 15-minute test and separate isolated reproduction passed |
+| Exploration Q1–Q8 | Tested final-mode runner and complete output tables included |
+| Q6 original languages | Reproducible P345/P364 collection, Spark preparation, coverage and final/pending controls included |
+| Open question | Actor–director first-observed-year versus later-year comparison implemented and executed |
+| Report and contacts | English report and contributor emails included; final group review remains required |
 
 Spark runs in `local[2]` mode inside one container, as in a local lab. This is not a multi-node Spark cluster. Kafka uses one KRaft broker/controller with persistent storage and no ZooKeeper.
 
@@ -327,30 +322,74 @@ Use one producer per state name and one consumer per run ID. A repeated run ID r
 
 The validated session `live-validation-20261114-v2` / `20261114T150245Z` lasted about 900.6 seconds and captured 130 distinct relevant live events in its window. This is a prior measured run, not a promise of identical future traffic. A fresh reproduction must inspect its own metrics. Matching uses exact English sitelinks → Wikidata IMDb IDs → cleaned title/person keys. The implementation uses a five-minute watermark and bounded deduplication; methodological discussion belongs to the members' own report.
 
-## Exploration and open question
+## Exploration, P364 and open-question execution
 
-Exploration code is not yet merged. [PR #5](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/5), `69da2b4`, implements Q1–Q3; six tests and full-data execution passed, with documentation and approval pending. [PR #7](https://github.com/Chancelor2023/ece-big-data-processing-project/pull/7), `beebb2d`, implements Q4–Q8; season-zero handling in Q5 and the original-language source in Q6 remain to be corrected. Its two revised Q6 tests fail against the published implementation, and the announced `tests.test_q5_q6_regression` module is absent. These are the last reviewed versions, not a successful final Q4–Q8 run.
+Q1–Q8 functions and original tests retain Brett273's authorship (3ad08a7, with Q1–Q3 from 69da2b4). The integration history also retains his PR branches. Jerry's completion adds the tested runner, P364 collection/preparation, publication guards, output handling, extra tests and open question. See [the implementation and reproduction guide](docs/INDEPENDENT_FINALIZATION.md).
 
-On a checkout containing the exploration modules, the provided entry points are:
+After preparing the seven IMDb tables and starting Compose, use this sequence
+on this integration branch:
 
 ```bash
-docker compose exec -T spark python -m unittest tests.test_exploration -v
-docker compose exec -T spark python -m unittest tests.test_exploration_q4_q8 -v
-docker compose exec -T spark python -m jobs.exploration.run
+docker compose exec -T spark python -m jobs.exploration.select_language_targets
+docker compose exec -T spark python -m jobs.exploration.collect_languages
+docker compose exec -T spark python -m jobs.exploration.prepare_languages
+docker compose exec -T spark python -m jobs.exploration.run --q6-mode final
+docker compose exec -T spark python -m jobs.open_question.run
 ```
 
-These commands identify the PR interfaces; use them only on a checkout containing those modules. Successful corrected Q4–Q8 execution on the full cleaned catalog is still to be validated.
+Use `collect_languages --run-id RUN_ID` to resume an existing selection; do not
+reselect it. Collection is serial, cached and resumable. Spark validates and
+publishes distinct `(tconst, language)` pairs with P345/P364 provenance, statuses
+and coverage. Q6 rejects incomplete or invalid publications, without an arbitrary
+minimum percentage. `jobs.exploration.run --q6-mode pending` can run the other
+questions while explicitly marking Q6 and the complete delivery partial.
 
-The agreed Q6 input contract is one distinct `(tconst, language)` pair per row, with Wikidata language IDs from P364, exact IMDb P345 matching, provenance and explicit missing/ambiguous coverage. A multilingual film contributes all its declared languages. No alternative-title language fallback is accepted. Collection must cover all Q6-eligible films, not just the enrichment top-ten selection. The corrected code must produce lists for at least two and at least three languages. No arbitrary numerical coverage threshold was proposed; a final Q6 validation still requires completed collection, successful controls, results and coverage, and cannot treat zero coverage as an answered question. An explicit `pending` Q6 mode may validate the other questions separately, not the entire Q4–Q8 delivery. Implementation and final commands remain Brett’s pending work; no P364 collector command is supplied here before it exists.
+Every independent query run has a unique output directory and refuses an
+existing run ID. Parameters and the source catalog are recorded in run.json.
+Outputs have typed Parquet and standard UTF-8 CSV; nested values are JSON strings
+in CSV. No results from Brett’s own directories are overwritten.
 
-The open question is assigned to Brett and has no delivered implementation or validated entry point yet. Its final command and outputs must be added before submission.
+Recorded full-data results use catalog `20261114T115800Z-6c04bdd1`:
+
+- P364: 14,190 eligible films, 12,862 with declared languages (90.64%),
+  14,814 film-language pairs; missing/ambiguous cases remain explicit.
+- Q1–Q8 completed in final mode, including 11,815 actors/actresses with at least
+  two languages and 4,478 with at least three.
+- Open question selected by Jerry: first observed versus later years of
+  actor–director collaborations; 18,764 pairs in the paired comparison.
+- 68 automated tests passed in an isolated checkout/container. Q1–Q3 have zero
+  differences from Brett’s unchanged reference on the same catalog/parameters.
+  This does not establish equivalence of Q4–Q8 with his unfinished runner.
+
+[Final query tables and coverage](report-assets/independent-final-20261115/INDEX.md)
+and [test/comparison evidence](report-assets/independent-validation-20261115/INDEX.md)
+are deliberately versioned factual assets. Verify them without Spark:
+
+```bash
+docker compose exec -T spark python -m jobs.reporting.verify_evidence --bundle report-assets/independent-final-20261115
+docker compose exec -T spark python -m jobs.reporting.verify_evidence --bundle report-assets/independent-validation-20261115
+```
+
+New reproductions use their own run IDs and can package outputs with
+`jobs.reporting.export_final_outputs --exploration-run RUN --open-run RUN --output report-assets/NEW-DIRECTORY`.
+Read the fallback guide for comparison commands and source/cohort limitations.
+The historical preparation/enrichment/streaming proofs remain unchanged.
+The report is populated. Declaration review and peer approval before main integration remain the group’s responsibility.
 
 ## Final reproduction and collaboration
 
-- Follow environment startup, both table-preparation stages, enrichment selection/pilot/full collection/base preparation, cached-biography supplementation, synopsis recovery, then the integrated exploration, live-streaming test and open question. Stop each Spark application before starting another.
-- Brett performs the complete clean-clone check once the remaining components are corrected and integrated. Run `docker compose exec -T spark python -m unittest discover -s tests -v`, then the documented processing stages. Preserve the tested commit, actual commands, exit codes, output paths, run IDs, source fingerprints and coverage. The evidence-only clone check is complete; the integrated processing check remains pending.
-- Each task uses a feature branch and a PR approved by the other group member before merging. Keep `main` and active PR branches; after a PR is merged and its changes verified on `main`, its remote feature branch can be deleted while retaining commits and PR history. Do not delete branches with active work or open PRs.
-- `REPORT.md` results and methodological reasoning remain the members’ own work. Complete actual contributor emails, report sections, exploration outputs and the open question before submission. Use repository-relative links to versioned evidence in the report; local ignored data/results paths are not accessible to the grader. Follow the course README for the submission email once the project is ready.
+Follow environment startup, both IMDb preparation stages, enrichment selection and collection, base text preparation, cached-biography supplementation, synopsis recovery, P364 selection/collection/preparation, final exploration, live-streaming validation and the open question. Run one Spark application at a time.
+
+```bash
+docker compose exec -T spark python -m unittest discover -s tests -v
+docker compose exec -T spark python -m jobs.reporting.verify_evidence
+docker compose exec -T spark python -m jobs.reporting.verify_evidence --bundle report-assets/independent-final-20261115
+docker compose exec -T spark python -m jobs.reporting.verify_evidence --bundle report-assets/independent-validation-20261115
+```
+
+The isolated simulation passed 68 tests, full-catalog exploration and open-question reproduction, 28 output checks, and a new real streaming session of 902.84 seconds with 140 relevant live-window events. It reused prepared datasets and collected sources read-only; it did not download and recollect every source from zero. REPORT.md cites the separately versioned 14 November streaming session of 900.63 seconds and 130 live-window matches. Do not mix the two sessions.
+
+Brett reviews the complete integration PR before approval and merge. Earlier comments or merges are not retroactive formal approvals. Follow the course README for the submission email after checking the final shared commit, report and evidence links.
 
 ## Stop and restart
 

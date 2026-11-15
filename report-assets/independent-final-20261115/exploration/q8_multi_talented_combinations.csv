@@ -1,0 +1,8 @@
+combination,n_person_movies,n_people,avg_rating
+actor+writer,11073,8232,5.5
+actor+director+writer,9189,6184,5.51
+actor+director,2490,1903,5.64
+actor,132040,17412,5.83
+director+writer,85074,42020,5.9
+writer,47437,16160,5.93
+director,41348,13956,5.94
